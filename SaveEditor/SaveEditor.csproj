@@ -17,4 +17,8 @@
 	<RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SaveTools\SaveTools.csproj" />
+  </ItemGroup>
+
 </Project>
