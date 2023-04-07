@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+	<RootNamespace>LM2.SaveEditor</RootNamespace>
+	<AssemblyName>LM2_SaveEditor</AssemblyName>
+	<Title>Luigi's Mansion 2 Save Editor</Title>
+	<Authors>Tolly Hill</Authors>
+	<Company>Tolly Hill</Company>
+	<Description>A save file editor for Luigi's Mansion 2</Description>
+	<Copyright>Copyright © 2023  Ptolemy Hill</Copyright>
+	<PackageProjectUrl>https://github.com/TollyH/LM2</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/TollyH/LM2</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>
