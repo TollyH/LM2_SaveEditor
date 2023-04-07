@@ -23,7 +23,7 @@
             crc = CRC.CalculateChecksum(crc, saveData, 13, 1);
             crc = CRC.CalculateChecksum(crc, saveData, 14, 8);
 
-            Assert.AreEqual(0x06EC6C0A, crc);
+            Assert.AreEqual(0x06EC6C0AU, crc);
         }
 
         [TestMethod]
@@ -322,7 +322,7 @@
             crc = CRC.CalculateChecksum(crc, saveData, 0xF17, 1);
             crc = CRC.CalculateChecksum(crc, saveData, 0xF18, 1);
 
-            Assert.AreEqual(0x372D116D, crc);
+            Assert.AreEqual(0x372D116DU, crc);
         }
     }
 }
