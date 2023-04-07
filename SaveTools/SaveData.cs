@@ -4,7 +4,7 @@
     {
         public class TitleScreenData
         {
-            public uint DataCRC => CalculateDataCRC();
+            public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
             public static uint VersionCRC => 0x49270C7B;
             public byte FurthestClearedMansion { get; set; }
             public byte FurthestClearedMission { get; set; }
@@ -20,12 +20,7 @@
                 throw new NotImplementedException();
             }
 
-            public byte[] GetBytes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public uint CalculateDataCRC()
+            public byte[] GetBytes(bool includeDataCRC = true)
             {
                 throw new NotImplementedException();
             }
@@ -33,7 +28,7 @@
 
         public class GameData
         {
-            public uint DataCRC => CalculateDataCRC();
+            public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
             public static uint VersionCRC => 0xD43203AD;
 
             public byte[] DiscoveredNIS { get; set; }
@@ -99,12 +94,7 @@
                 throw new NotImplementedException();
             }
 
-            public byte[] GetBytes()
-            {
-                throw new NotImplementedException();
-            }
-
-            public uint CalculateDataCRC()
+            public byte[] GetBytes(bool includeDataCRC = true)
             {
                 throw new NotImplementedException();
             }
