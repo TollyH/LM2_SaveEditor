@@ -1,4 +1,6 @@
-﻿namespace LM2.SaveTools
+﻿using System.Buffers.Binary;
+
+namespace LM2.SaveTools
 {
     public class SaveData
     {
@@ -17,12 +19,68 @@
 
             public TitleScreenData(byte[] titleScreenSaveBytes, bool ignoreCRC = false)
             {
-                throw new NotImplementedException();
+                if (titleScreenSaveBytes.Length != 0x1A)
+                {
+                    throw new InvalidDataException(
+                        $"Title screen save data must be 0x1A (26) bytes long. {titleScreenSaveBytes.Length} bytes were provided.");
+                }
+
+                Span<byte> titleScreenSpan = titleScreenSaveBytes.AsSpan();
+
+                if (!ignoreCRC)
+                {
+                    uint apparentDataCRC = BinaryPrimitives.ReadUInt32LittleEndian(titleScreenSpan[..4]);
+                    if (apparentDataCRC != CRC.CalculateChecksum(titleScreenSpan[4..]))
+                    {
+                        throw new InvalidDataException(
+                            "Given title screen save data has an invalid data checksum. Set the ignoreCRC parameter to true to ignore this in the future.");
+                    }
+
+                    uint givenVersionCRC = BinaryPrimitives.ReadUInt32LittleEndian(titleScreenSpan[4..8]);
+                    if (givenVersionCRC != VersionCRC)
+                    {
+                        throw new InvalidDataException(
+                            "Given title screen save data has an invalid version checksum (this should always be 0x7B, 0x0C, 0x27, 0x49). " +
+                            "Set the ignoreCRC parameter to true to ignore this in the future.");
+                    }
+                }
+
+                FurthestClearedMansion = titleScreenSpan[8];
+                FurthestClearedMission = titleScreenSpan[9];
+                HighestTowerFloor = titleScreenSpan[10];
+                TotalTreasureAcquired = BinaryPrimitives.ReadInt32LittleEndian(titleScreenSpan[11..15]);
+                BoosCaptured = titleScreenSpan[15];
+                DarkMoonPieces = titleScreenSpan[16];
+                EGaddMedals = titleScreenSpan[17];
+                PlaytimeSeconds = BinaryPrimitives.ReadInt64LittleEndian(titleScreenSpan[18..26]);
             }
 
             public byte[] GetBytes(bool includeDataCRC = true)
             {
-                throw new NotImplementedException();
+                byte[] titleSaveBytes = new byte[includeDataCRC ? 26 : 22];
+
+                Span<byte> titleSaveSpan;
+                if (includeDataCRC)
+                {
+                    BinaryPrimitives.WriteUInt32LittleEndian(titleSaveBytes, DataCRC);
+                    titleSaveSpan = titleSaveBytes.AsSpan()[4..];
+                }
+                else
+                {
+                    titleSaveSpan = titleSaveBytes.AsSpan();
+                }
+
+                BinaryPrimitives.WriteUInt32LittleEndian(titleSaveSpan, VersionCRC);
+                titleSaveSpan[4] = FurthestClearedMansion;
+                titleSaveSpan[5] = FurthestClearedMission;
+                titleSaveSpan[6] = HighestTowerFloor;
+                BinaryPrimitives.WriteInt32LittleEndian(titleSaveSpan[7..11], TotalTreasureAcquired);
+                titleSaveSpan[11] = BoosCaptured;
+                titleSaveSpan[12] = DarkMoonPieces;
+                titleSaveSpan[13] = EGaddMedals;
+                BinaryPrimitives.WriteInt64LittleEndian(titleSaveSpan[14..22], PlaytimeSeconds);
+
+                return titleSaveBytes;
             }
         }
 
