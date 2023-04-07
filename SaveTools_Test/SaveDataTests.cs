@@ -15,7 +15,7 @@
             };
             SaveData.TitleScreenData obj = new(titleData);
 
-            Assert.AreEqual(0x50C424C2, obj.DataCRC);
+            Assert.AreEqual(0x50C424C2U, obj.DataCRC);
             Assert.AreEqual(5, obj.FurthestClearedMansion);
             Assert.AreEqual(0, obj.FurthestClearedMission);
             Assert.AreEqual(25, obj.HighestTowerFloor);
@@ -321,33 +321,35 @@
 
             SaveData.GameData obj = new(gameData);
 
+            Assert.AreEqual(0xC121B670U, obj.DataCRC);
+
             Assert.IsTrue(obj.MissionCompletion[0]);
             Assert.IsFalse(obj.MissionCompletion[9]);
             Assert.IsTrue(obj.MissionCompletion[35]);
             Assert.IsFalse(obj.MissionCompletion[59]);
 
-            Assert.AreEqual(obj.MissionGrade[0], Grade.Gold);
-            Assert.AreEqual(obj.MissionGrade[9], Grade.Bronze);
-            Assert.AreEqual(obj.MissionGrade[35], Grade.Silver);
-            Assert.AreEqual(obj.MissionGrade[59], Grade.Bronze);
+            Assert.AreEqual(Grade.Gold, obj.MissionGrade[0]);
+            Assert.AreEqual(Grade.Bronze, obj.MissionGrade[9]);
+            Assert.AreEqual(Grade.Silver, obj.MissionGrade[35]);
+            Assert.AreEqual(Grade.Bronze, obj.MissionGrade[59]);
 
-            Assert.AreEqual(obj.MissionClearTime[0], 167);
-            Assert.AreEqual(obj.MissionClearTime[9], 0);
-            Assert.AreEqual(obj.MissionClearTime[35], 394);
-            Assert.AreEqual(obj.MissionClearTime[59], 0);
+            Assert.AreEqual(167, obj.MissionClearTime[0]);
+            Assert.AreEqual(0, obj.MissionClearTime[9]);
+            Assert.AreEqual(394, obj.MissionClearTime[35]);
+            Assert.AreEqual(0, obj.MissionClearTime[59]);
 
-            Assert.AreEqual(obj.MissionTreasureCollected[0], 1227);
-            Assert.AreEqual(obj.MissionTreasureCollected[9], 0);
-            Assert.AreEqual(obj.MissionTreasureCollected[35], 60);
-            Assert.AreEqual(obj.MissionTreasureCollected[59], 0);
+            Assert.AreEqual(1227, obj.MissionTreasureCollected[0]);
+            Assert.AreEqual(0, obj.MissionTreasureCollected[9]);
+            Assert.AreEqual(60, obj.MissionTreasureCollected[35]);
+            Assert.AreEqual(0, obj.MissionTreasureCollected[59]);
 
             Assert.IsFalse(obj.JustCollectedPolterpup);
 
             Assert.IsTrue(obj.SeenInitialDualScreamAnimation);
 
-            Assert.AreEqual(obj.LastMansionPlayed, 4);
+            Assert.AreEqual(4, obj.LastMansionPlayed);
 
-            Assert.AreEqual(obj.TowerNotifyState, 2);
+            Assert.AreEqual(2, obj.TowerNotifyState);
 
             Assert.IsTrue(Enumerable.SequenceEqual(gameData, obj.GetBytes()));
         }
