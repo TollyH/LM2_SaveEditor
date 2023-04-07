@@ -4,7 +4,7 @@ namespace LM2.SaveTools
 {
     public static class CRC
     {
-        public static uint CalculateChecksum(IList<byte> source, uint initial = 0)
+        public static uint CalculateChecksum(Span<byte> source, uint initial = 0)
         {
             uint crc = initial;
             foreach (byte toProcess in source)
