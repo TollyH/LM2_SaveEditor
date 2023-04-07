@@ -15,7 +15,7 @@
             public byte EGaddMedals { get; set; }
             public long PlaytimeSeconds { get; set; }
 
-            public TitleScreenData(byte[] titleScreenSaveBytes)
+            public TitleScreenData(byte[] titleScreenSaveBytes, bool ignoreCRC = false)
             {
                 throw new NotImplementedException();
             }
@@ -94,7 +94,7 @@
             public bool RandomTowerUnlocked { get; set; }
             public byte TowerNotifyState { get; set; }
 
-            public GameData(byte[] gameDataBytes)
+            public GameData(byte[] gameDataBytes, bool ignoreCRC = false)
             {
                 throw new NotImplementedException();
             }
@@ -110,7 +110,7 @@
             }
         }
 
-        public SaveData(byte[] saveBytes)
+        public SaveData(byte[] saveBytes, bool ignoreCRC = false)
         {
             throw new NotImplementedException();
         }
