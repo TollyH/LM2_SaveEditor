@@ -4,15 +4,14 @@ namespace LM2.SaveTools
 {
     public static class CRC
     {
-        public static uint CalculateChecksum(uint initial, byte[] source, int sourceOffset, int bytesToProcess)
+        public static uint CalculateChecksum(IList<byte> source, uint initial = 0)
         {
             uint crc = initial;
-            for (; bytesToProcess > 0; bytesToProcess--, sourceOffset++)
+            foreach (byte toProcess in source)
             {
-                int lookupIndex = (int)((source[sourceOffset] ^ (crc & 0xff)) * 4);
+                int lookupIndex = (int)((toProcess ^ (crc & 0xff)) * 4);
                 crc = LookupCRCTable(lookupIndex) ^ (crc >> 8);
             }
-
             return crc;
         }
 

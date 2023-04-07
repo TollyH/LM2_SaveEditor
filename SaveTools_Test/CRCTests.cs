@@ -13,15 +13,7 @@
                 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
             };
 
-            uint crc = CRC.CalculateChecksum(0x00000000, saveData, 0, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 4, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 5, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 6, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 7, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 11, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 12, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 13, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 14, 8);
+            uint crc = CRC.CalculateChecksum(saveData);
 
             Assert.AreEqual(0x06EC6C0AU, crc);
         }
@@ -274,53 +266,7 @@
                 0x00, 0x00, 0x19, 0x01, 0x00, 0x00, 0x00, 0x01, 0x02
             };
 
-            uint crc = CRC.CalculateChecksum(0x00000000, saveData, 0, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 4, 0x800);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x804, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x840, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x87C, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x8B8, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x8F4, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x930, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x96C, 0x3C);
-            crc = CRC.CalculateChecksum(crc, saveData, 0x9A8, 0xF0);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xA98, 0x78);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xB10, 0x78);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xB88, 0x78);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC00, 0x1D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC1D, 0x3A);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC57, 0x1D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC74, 0x1D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC91, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC92, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xC93, 0x5A);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xCED, 0x2D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xD1A, 0x2D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xD47, 0x5A);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xDA1, 0x2D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xDCE, 0x2D);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xDFB, 0x4E);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE49, 0x4E);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE97, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE98, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE99, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE9A, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE9B, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xE9F, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEA3, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEA7, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEA8, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEA9, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEAA, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEAB, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEAC, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEAD, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xEAE, 0x60);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xF0E, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xF12, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xF13, 4);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xF17, 1);
-            crc = CRC.CalculateChecksum(crc, saveData, 0xF18, 1);
+            uint crc = CRC.CalculateChecksum(saveData);
 
             Assert.AreEqual(0x372D116DU, crc);
         }
