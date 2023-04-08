@@ -149,12 +149,370 @@ namespace LM2.SaveTools
 
             public GameData(byte[] gameDataBytes, bool ignoreCRC = false)
             {
-                throw new NotImplementedException();
+                if (gameDataBytes.Length != 0xF1D)
+                {
+                    throw new InvalidDataException(
+                        $"Game save data must be 0xF1D (3869) bytes long. {gameDataBytes.Length} bytes were provided.");
+                }
+
+                Span<byte> gameDataSpan = gameDataBytes.AsSpan();
+
+                if (!ignoreCRC)
+                {
+                    uint apparentDataCRC = BinaryPrimitives.ReadUInt32LittleEndian(gameDataSpan[..4]);
+                    if (apparentDataCRC != CRC.CalculateChecksum(gameDataSpan[4..]))
+                    {
+                        throw new InvalidDataException(
+                            "Given game save data has an invalid data checksum. Set the ignoreCRC parameter to true to ignore this in the future.");
+                    }
+
+                    uint givenVersionCRC = BinaryPrimitives.ReadUInt32LittleEndian(gameDataSpan[4..8]);
+                    if (givenVersionCRC != VersionCRC)
+                    {
+                        throw new InvalidDataException(
+                            "Given game save data has an invalid version checksum (this should always be 0xAD, 0x03, 0x32, 0xD4). " +
+                            "Set the ignoreCRC parameter to true to ignore this in the future.");
+                    }
+                }
+
+                DiscoveredNIS = gameDataSpan[8..0x808].ToArray();
+
+                MissionCompletion = new bool[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionCompletion[i] = gameDataSpan[0x808 + i] == 1;
+                }
+
+                MissionLocked = new bool[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionLocked[i] = gameDataSpan[0x844 + i] == 1;
+                }
+
+                MissionGrade = new Grade[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionGrade[i] = (Grade)gameDataSpan[0x880 + i];
+                }
+
+                MissionPrevGrade = new Grade[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionPrevGrade[i] = (Grade)gameDataSpan[0x8BC + i];
+                }
+
+                MissionBooCaptured = new bool[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionBooCaptured[i] = gameDataSpan[0x8F8 + i] == 1;
+                }
+
+                MissionBooNotifyState = new byte[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionBooNotifyState[i] = gameDataSpan[0x934 + i];
+                }
+
+                MissionNotifyState = new byte[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionNotifyState[i] = gameDataSpan[0x970 + i];
+                }
+
+                MissionClearTime = new float[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionClearTime[i] = BinaryPrimitives.ReadSingleLittleEndian(gameDataSpan[((i * 4) + 0x9AC)..]);
+                }
+
+                MissionGhostsCaptured = new short[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionGhostsCaptured[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xA9C)..]);
+                }
+
+                MissionDamageTaken = new short[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionDamageTaken[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xB14)..]);
+                }
+
+                MissionTreasureCollected = new short[60];
+                for (int i = 0; i < 60; i++)
+                {
+                    MissionTreasureCollected[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xB8C)..]);
+                }
+
+                NumBasicGhostCollected = new byte[29];
+                for (int i = 0; i < 29; i++)
+                {
+                    NumBasicGhostCollected[i] = gameDataSpan[0xC04 + i];
+                }
+
+                MaxBasicGhostWeight = new short[29];
+                for (int i = 0; i < 29; i++)
+                {
+                    MaxBasicGhostWeight[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xC21)..]);
+                }
+
+                BasicGhostNotifyState = new byte[29];
+                for (int i = 0; i < 29; i++)
+                {
+                    BasicGhostNotifyState[i] = gameDataSpan[0xC5B + i];
+                }
+
+                BasicGhostNotifyBecauseHigherWeight = new byte[29];
+                for (int i = 0; i < 29; i++)
+                {
+                    BasicGhostNotifyBecauseHigherWeight[i] = gameDataSpan[0xC78 + i];
+                }
+
+                AnyOptionalBooCaptured = gameDataSpan[0xC95] == 1;
+                JustCollectedPolterpup = gameDataSpan[0xC96] == 1;
+
+                GhostWeightRequirement = new short[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    GhostWeightRequirement[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xC97)..]);
+                }
+
+                GhostCollectableState = new byte[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    GhostCollectableState[i] = gameDataSpan[0xCF1 + i];
+                }
+
+                NumGhostCollected = new byte[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    NumGhostCollected[i] = gameDataSpan[0xD1E + i];
+                }
+
+                MaxGhostWeight = new short[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    MaxGhostWeight[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xD4B)..]);
+                }
+
+                GhostNotifyState = new byte[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    GhostNotifyState[i] = gameDataSpan[0xDA5 + i];
+                }
+
+                GhostNotifyBecauseHigherWeight = new byte[45];
+                for (int i = 0; i < 45; i++)
+                {
+                    GhostNotifyBecauseHigherWeight[i] = gameDataSpan[0xDD2 + i];
+                }
+
+                GemCollected = new bool[78];
+                for (int i = 0; i < 78; i++)
+                {
+                    GemCollected[i] = gameDataSpan[0xDFF + i] == 1;
+                }
+
+                GemNotifyState = new byte[78];
+                for (int i = 0; i < 78; i++)
+                {
+                    GemNotifyState[i] = gameDataSpan[0xE4D + i];
+                }
+
+                HasPoltergust = gameDataSpan[0xE9B] == 1;
+                SeenInitialDualScreamAnimation = gameDataSpan[0xE9C] == 1;
+                HasMarioBeenRevealedInTheStory = gameDataSpan[0xE9D] == 1;
+                LastMansionPlayed = gameDataSpan[0xE9E];
+                TotalTreasureAcquired = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xE9F..0xEA3]);
+                TreasureToNotifyDuringUnloading = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xEA3..0xEA7]);
+                TotalGhostWeightAcquired = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xEA7..0xEAB]);
+                DarklightUpgradeLevel = gameDataSpan[0xEAB];
+                DarklightNotifyState = gameDataSpan[0xEAC];
+                PoltergustUpgradeLevel = gameDataSpan[0xEAD];
+                PoltergustNotifyState = gameDataSpan[0xEAE];
+                HasSuperPoltergust = gameDataSpan[0xEAF] == 1;
+                SuperPoltergustNotifyState = gameDataSpan[0xEB0];
+                HasSeenReviveBonePIP = gameDataSpan[0xEB1] == 1;
+
+                BestTowerClearTime = new short[48];
+                for (int i = 0; i < 48; i++)
+                {
+                    BestTowerClearTime[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xEB2)..]);
+                }
+
+                EndlessModeHighestFloorReached = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xF12..0xF16]);
+                AnyModeHighestFloorReached = gameDataSpan[0xF16];
+                EndlessFloorsUnlocked = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xF17..0xF1B]);
+                RandomTowerUnlocked = gameDataSpan[0xF1B] == 1;
+                TowerNotifyState = gameDataSpan[0xF1C];
             }
 
             public byte[] GetBytes(bool includeDataCRC = true)
             {
-                throw new NotImplementedException();
+                byte[] gameSaveBytes = new byte[includeDataCRC ? 3869 : 3865];
+
+                Span<byte> gameSaveSpan;
+                if (includeDataCRC)
+                {
+                    BinaryPrimitives.WriteUInt32LittleEndian(gameSaveBytes, DataCRC);
+                    gameSaveSpan = gameSaveBytes.AsSpan()[4..];
+                }
+                else
+                {
+                    gameSaveSpan = gameSaveBytes.AsSpan();
+                }
+
+                int offset = 0;
+
+                BinaryPrimitives.WriteUInt32LittleEndian(gameSaveSpan, VersionCRC);
+                offset += 4;
+
+                foreach (byte nis in DiscoveredNIS)
+                {
+                    gameSaveSpan[offset++] = nis;
+                }
+
+                foreach (bool completion in MissionCompletion)
+                {
+                    gameSaveSpan[offset++] = (byte)(completion ? 1 : 0);
+                }
+                foreach (bool locked in MissionLocked)
+                {
+                    gameSaveSpan[offset++] = (byte)(locked ? 1 : 0);
+                }
+                foreach (Grade grade in MissionGrade)
+                {
+                    gameSaveSpan[offset++] = (byte)grade;
+                }
+                foreach (Grade grade in MissionPrevGrade)
+                {
+                    gameSaveSpan[offset++] = (byte)grade;
+                }
+                foreach (bool boo in MissionBooCaptured)
+                {
+                    gameSaveSpan[offset++] = (byte)(boo ? 1 : 0);
+                }
+                foreach (byte booNotify in MissionBooNotifyState)
+                {
+                    gameSaveSpan[offset++] = booNotify;
+                }
+                foreach (byte notify in MissionNotifyState)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+                foreach (float time in MissionClearTime)
+                {
+                    BinaryPrimitives.WriteSingleLittleEndian(gameSaveSpan[offset..], time);
+                    offset += 4;
+                }
+                foreach (short ghosts in MissionGhostsCaptured)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], ghosts);
+                    offset += 2;
+                }
+                foreach (short damage in MissionDamageTaken)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], damage);
+                    offset += 2;
+                }
+                foreach (short treasure in MissionTreasureCollected)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], treasure);
+                    offset += 2;
+                }
+
+                foreach (byte collected in NumBasicGhostCollected)
+                {
+                    gameSaveSpan[offset++] = collected;
+                }
+                foreach (short weight in MaxBasicGhostWeight)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    offset += 2;
+                }
+                foreach (byte notify in BasicGhostNotifyState)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+                foreach (byte notify in BasicGhostNotifyBecauseHigherWeight)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+
+                gameSaveSpan[offset++] = (byte)(AnyOptionalBooCaptured ? 1 : 0);
+                gameSaveSpan[offset++] = (byte)(JustCollectedPolterpup ? 1 : 0);
+
+                foreach (short weight in GhostWeightRequirement)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    offset += 2;
+                }
+                foreach (byte state in GhostCollectableState)
+                {
+                    gameSaveSpan[offset++] = state;
+                }
+                foreach (byte collected in NumGhostCollected)
+                {
+                    gameSaveSpan[offset++] = collected;
+                }
+                foreach (short weight in MaxGhostWeight)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    offset += 2;
+                }
+                foreach (byte notify in GhostNotifyState)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+                foreach (byte notify in GhostNotifyBecauseHigherWeight)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+
+                foreach (bool gem in GemCollected)
+                {
+                    gameSaveSpan[offset++] = (byte)(gem ? 1 : 0);
+                }
+                foreach (byte notify in GemNotifyState)
+                {
+                    gameSaveSpan[offset++] = notify;
+                }
+
+                gameSaveSpan[offset++] = (byte)(HasPoltergust ? 1 : 0);
+                gameSaveSpan[offset++] = (byte)(SeenInitialDualScreamAnimation ? 1 : 0);
+                gameSaveSpan[offset++] = (byte)(HasMarioBeenRevealedInTheStory ? 1 : 0);
+
+                gameSaveSpan[offset++] = LastMansionPlayed;
+
+                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], TotalTreasureAcquired);
+                offset += 4;
+                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], TreasureToNotifyDuringUnloading);
+                offset += 4;
+                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], TotalGhostWeightAcquired);
+                offset += 4;
+
+                gameSaveSpan[offset++] = DarklightUpgradeLevel;
+                gameSaveSpan[offset++] = DarklightNotifyState;
+                gameSaveSpan[offset++] = PoltergustUpgradeLevel;
+                gameSaveSpan[offset++] = PoltergustNotifyState;
+                gameSaveSpan[offset++] = (byte)(HasSuperPoltergust ? 1 : 0);
+                gameSaveSpan[offset++] = SuperPoltergustNotifyState;
+
+                gameSaveSpan[offset++] = (byte)(HasSeenReviveBonePIP ? 1 : 0);
+
+                foreach (short time in BestTowerClearTime)
+                {
+                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], time);
+                    offset += 2;
+                }
+                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], EndlessModeHighestFloorReached);
+                offset += 4;
+                gameSaveSpan[offset++] = AnyModeHighestFloorReached;
+                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], EndlessFloorsUnlocked);
+                offset += 4;
+                gameSaveSpan[offset++] = (byte)(RandomTowerUnlocked ? 1 : 0);
+                gameSaveSpan[offset++] = TowerNotifyState;
+
+                return gameSaveBytes;
             }
         }
 
