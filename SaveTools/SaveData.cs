@@ -516,14 +516,29 @@ namespace LM2.SaveTools
             }
         }
 
+        public TitleScreenData TitleScreenSaveData { get; private set; }
+        public GameData GameSaveData { get; private set; }
+
         public SaveData(byte[] saveBytes, bool ignoreCRC = false)
         {
-            throw new NotImplementedException();
+            if (saveBytes.Length != 0xF37)
+            {
+                throw new InvalidDataException(
+                    $"Save data must be 0xF37 (3895) bytes long. {saveBytes.Length} bytes were provided.");
+            }
+
+            TitleScreenSaveData = new(saveBytes[..0x1A], ignoreCRC);
+            GameSaveData = new(saveBytes[0x1A..], ignoreCRC);
         }
 
         public byte[] GetBytes()
         {
-            throw new NotImplementedException();
+            byte[] saveData = new byte[0xF37];
+
+            Array.Copy(TitleScreenSaveData.GetBytes(includeDataCRC: true), saveData, 0x1A);
+            Array.Copy(GameSaveData.GetBytes(includeDataCRC: true), 0, saveData, 0x1A, 0xF1D);
+
+            return saveData;
         }
     }
 }
