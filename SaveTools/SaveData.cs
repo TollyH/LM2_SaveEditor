@@ -99,22 +99,22 @@ namespace LM2.SaveTools
             public byte[] MissionBooNotifyState { get; private set; }
             public byte[] MissionNotifyState { get; private set; }
             public float[] MissionClearTime { get; private set; }
-            public short[] MissionGhostsCaptured { get; private set; }
-            public short[] MissionDamageTaken { get; private set; }
-            public short[] MissionTreasureCollected { get; private set; }
+            public ushort[] MissionGhostsCaptured { get; private set; }
+            public ushort[] MissionDamageTaken { get; private set; }
+            public ushort[] MissionTreasureCollected { get; private set; }
 
             public byte[] NumBasicGhostCollected { get; private set; }
-            public short[] MaxBasicGhostWeight { get; private set; }
+            public ushort[] MaxBasicGhostWeight { get; private set; }
             public byte[] BasicGhostNotifyState { get; private set; }
             public byte[] BasicGhostNotifyBecauseHigherWeight { get; private set; }
 
             public bool AnyOptionalBooCaptured { get; set; }
             public bool JustCollectedPolterpup { get; set; }
 
-            public short[] GhostWeightRequirement { get; private set; }
+            public ushort[] GhostWeightRequirement { get; private set; }
             public byte[] GhostCollectableState { get; private set; }
             public byte[] NumGhostCollected { get; private set; }
-            public short[] MaxGhostWeight { get; private set; }
+            public ushort[] MaxGhostWeight { get; private set; }
             public byte[] GhostNotifyState { get; private set; }
             public byte[] GhostNotifyBecauseHigherWeight { get; private set; }
 
@@ -140,7 +140,7 @@ namespace LM2.SaveTools
 
             public bool HasSeenReviveBonePIP { get; set; }
 
-            public short[] BestTowerClearTime { get; private set; }
+            public ushort[] BestTowerClearTime { get; private set; }
             public int EndlessModeHighestFloorReached { get; set; }
             public byte AnyModeHighestFloorReached { get; set; }
             public int EndlessFloorsUnlocked { get; set; }
@@ -225,22 +225,22 @@ namespace LM2.SaveTools
                     MissionClearTime[i] = BinaryPrimitives.ReadSingleLittleEndian(gameDataSpan[((i * 4) + 0x9AC)..]);
                 }
 
-                MissionGhostsCaptured = new short[60];
+                MissionGhostsCaptured = new ushort[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionGhostsCaptured[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xA9C)..]);
+                    MissionGhostsCaptured[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xA9C)..]);
                 }
 
-                MissionDamageTaken = new short[60];
+                MissionDamageTaken = new ushort[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionDamageTaken[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xB14)..]);
+                    MissionDamageTaken[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xB14)..]);
                 }
 
-                MissionTreasureCollected = new short[60];
+                MissionTreasureCollected = new ushort[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionTreasureCollected[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xB8C)..]);
+                    MissionTreasureCollected[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xB8C)..]);
                 }
 
                 NumBasicGhostCollected = new byte[29];
@@ -249,10 +249,10 @@ namespace LM2.SaveTools
                     NumBasicGhostCollected[i] = gameDataSpan[0xC04 + i];
                 }
 
-                MaxBasicGhostWeight = new short[29];
+                MaxBasicGhostWeight = new ushort[29];
                 for (int i = 0; i < 29; i++)
                 {
-                    MaxBasicGhostWeight[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xC21)..]);
+                    MaxBasicGhostWeight[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xC21)..]);
                 }
 
                 BasicGhostNotifyState = new byte[29];
@@ -270,10 +270,10 @@ namespace LM2.SaveTools
                 AnyOptionalBooCaptured = gameDataSpan[0xC95] == 1;
                 JustCollectedPolterpup = gameDataSpan[0xC96] == 1;
 
-                GhostWeightRequirement = new short[45];
+                GhostWeightRequirement = new ushort[45];
                 for (int i = 0; i < 45; i++)
                 {
-                    GhostWeightRequirement[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xC97)..]);
+                    GhostWeightRequirement[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xC97)..]);
                 }
 
                 GhostCollectableState = new byte[45];
@@ -288,10 +288,10 @@ namespace LM2.SaveTools
                     NumGhostCollected[i] = gameDataSpan[0xD1E + i];
                 }
 
-                MaxGhostWeight = new short[45];
+                MaxGhostWeight = new ushort[45];
                 for (int i = 0; i < 45; i++)
                 {
-                    MaxGhostWeight[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xD4B)..]);
+                    MaxGhostWeight[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xD4B)..]);
                 }
 
                 GhostNotifyState = new byte[45];
@@ -333,10 +333,10 @@ namespace LM2.SaveTools
                 SuperPoltergustNotifyState = gameDataSpan[0xEB0];
                 HasSeenReviveBonePIP = gameDataSpan[0xEB1] == 1;
 
-                BestTowerClearTime = new short[48];
+                BestTowerClearTime = new ushort[48];
                 for (int i = 0; i < 48; i++)
                 {
-                    BestTowerClearTime[i] = BinaryPrimitives.ReadInt16LittleEndian(gameDataSpan[((i * 2) + 0xEB2)..]);
+                    BestTowerClearTime[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xEB2)..]);
                 }
 
                 EndlessModeHighestFloorReached = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xF12..0xF16]);
@@ -404,19 +404,19 @@ namespace LM2.SaveTools
                     BinaryPrimitives.WriteSingleLittleEndian(gameSaveSpan[offset..], time);
                     offset += 4;
                 }
-                foreach (short ghosts in MissionGhostsCaptured)
+                foreach (ushort ghosts in MissionGhostsCaptured)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], ghosts);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], ghosts);
                     offset += 2;
                 }
-                foreach (short damage in MissionDamageTaken)
+                foreach (ushort damage in MissionDamageTaken)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], damage);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], damage);
                     offset += 2;
                 }
-                foreach (short treasure in MissionTreasureCollected)
+                foreach (ushort treasure in MissionTreasureCollected)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], treasure);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], treasure);
                     offset += 2;
                 }
 
@@ -424,9 +424,9 @@ namespace LM2.SaveTools
                 {
                     gameSaveSpan[offset++] = collected;
                 }
-                foreach (short weight in MaxBasicGhostWeight)
+                foreach (ushort weight in MaxBasicGhostWeight)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], weight);
                     offset += 2;
                 }
                 foreach (byte notify in BasicGhostNotifyState)
@@ -441,9 +441,9 @@ namespace LM2.SaveTools
                 gameSaveSpan[offset++] = (byte)(AnyOptionalBooCaptured ? 1 : 0);
                 gameSaveSpan[offset++] = (byte)(JustCollectedPolterpup ? 1 : 0);
 
-                foreach (short weight in GhostWeightRequirement)
+                foreach (ushort weight in GhostWeightRequirement)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], weight);
                     offset += 2;
                 }
                 foreach (byte state in GhostCollectableState)
@@ -454,9 +454,9 @@ namespace LM2.SaveTools
                 {
                     gameSaveSpan[offset++] = collected;
                 }
-                foreach (short weight in MaxGhostWeight)
+                foreach (ushort weight in MaxGhostWeight)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], weight);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], weight);
                     offset += 2;
                 }
                 foreach (byte notify in GhostNotifyState)
@@ -499,9 +499,9 @@ namespace LM2.SaveTools
 
                 gameSaveSpan[offset++] = (byte)(HasSeenReviveBonePIP ? 1 : 0);
 
-                foreach (short time in BestTowerClearTime)
+                foreach (ushort time in BestTowerClearTime)
                 {
-                    BinaryPrimitives.WriteInt16LittleEndian(gameSaveSpan[offset..], time);
+                    BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], time);
                     offset += 2;
                 }
                 BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], EndlessModeHighestFloorReached);
