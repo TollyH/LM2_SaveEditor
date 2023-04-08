@@ -89,37 +89,37 @@ namespace LM2.SaveTools
             public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
             public static uint VersionCRC => 0xD43203AD;
 
-            public byte[] DiscoveredNIS { get; set; }
+            public byte[] DiscoveredNIS { get; private set; }
 
-            public bool[] MissionCompletion { get; set; }
-            public bool[] MissionLocked { get; set; }
-            public Grade[] MissionGrade { get; set; }
-            public Grade[] MissionPrevGrade { get; set; }
-            public bool[] MissionBooCaptured { get; set; }
-            public byte[] MissionBooNotifyState { get; set; }
-            public byte[] MissionNotifyState { get; set; }
-            public float[] MissionClearTime { get; set; }
-            public short[] MissionGhostsCaptured { get; set; }
-            public short[] MissionDamageTaken { get; set; }
-            public short[] MissionTreasureCollected { get; set; }
+            public bool[] MissionCompletion { get; private set; }
+            public bool[] MissionLocked { get; private set; }
+            public Grade[] MissionGrade { get; private set; }
+            public Grade[] MissionPrevGrade { get; private set; }
+            public bool[] MissionBooCaptured { get; private set; }
+            public byte[] MissionBooNotifyState { get; private set; }
+            public byte[] MissionNotifyState { get; private set; }
+            public float[] MissionClearTime { get; private set; }
+            public short[] MissionGhostsCaptured { get; private set; }
+            public short[] MissionDamageTaken { get; private set; }
+            public short[] MissionTreasureCollected { get; private set; }
 
-            public byte[] NumBasicGhostCollected { get; set; }
-            public short[] MaxBasicGhostWeight { get; set; }
-            public byte[] BasicGhostNotifyState { get; set; }
-            public byte[] BasicGhostNotifyBecauseHigherWeight { get; set; }
+            public byte[] NumBasicGhostCollected { get; private set; }
+            public short[] MaxBasicGhostWeight { get; private set; }
+            public byte[] BasicGhostNotifyState { get; private set; }
+            public byte[] BasicGhostNotifyBecauseHigherWeight { get; private set; }
 
             public bool AnyOptionalBooCaptured { get; set; }
             public bool JustCollectedPolterpup { get; set; }
 
-            public short[] GhostWeightRequirement { get; set; }
-            public byte[] GhostCollectableState { get; set; }
-            public byte[] NumGhostCollected { get; set; }
-            public short[] MaxGhostWeight { get; set; }
-            public byte[] GhostNotifyState { get; set; }
-            public byte[] GhostNotifyBecauseHigherWeight { get; set; }
+            public short[] GhostWeightRequirement { get; private set; }
+            public byte[] GhostCollectableState { get; private set; }
+            public byte[] NumGhostCollected { get; private set; }
+            public short[] MaxGhostWeight { get; private set; }
+            public byte[] GhostNotifyState { get; private set; }
+            public byte[] GhostNotifyBecauseHigherWeight { get; private set; }
 
-            public bool[] GemCollected { get; set; }
-            public byte[] GemNotifyState { get; set; }
+            public bool[] GemCollected { get; private set; }
+            public byte[] GemNotifyState { get; private set; }
 
             public bool HasPoltergust { get; set; }
             public bool SeenInitialDualScreamAnimation { get; set; }
@@ -140,7 +140,7 @@ namespace LM2.SaveTools
 
             public bool HasSeenReviveBonePIP { get; set; }
 
-            public short[] BestTowerClearTime { get; set; }
+            public short[] BestTowerClearTime { get; private set; }
             public int EndlessModeHighestFloorReached { get; set; }
             public byte AnyModeHighestFloorReached { get; set; }
             public int EndlessFloorsUnlocked { get; set; }
