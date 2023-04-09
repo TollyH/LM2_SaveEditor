@@ -47,6 +47,100 @@ namespace LM2.SaveTools
             { 50, "King Boo" }
         }.ToImmutableDictionary();
 
+        public static readonly ImmutableDictionary<int, string> EvershadeGhostIndices = new Dictionary<int, string>()
+        {
+            { 12, "Greenie" },
+            { 1, "Slammer" },
+            { 9, "Hider" },
+            { 24, "Sneaker" },
+            { 6, "Creeper" },
+
+            { 26, "Sister Melinda" },
+            { 27, "Sister Belinda" },
+            { 28, "Sister Herlinda" },
+            { 7, "Gobber" },
+            { 15, "Boffin" },
+
+            { 13, "Strong Greenie" },
+            { 2, "Strong Slammer" },
+            { 10, "Strong Hider" },
+            { 25, "Strong Sneaker" },
+            { 8, "Strong Gobber" },
+
+            { 19, "Grouchy Possessor" },
+            { 20, "Harsh Possessor" },
+            { 21, "Overset Possessor" },
+            { 22, "Scornful Possessor" },
+            { 23, "Tough Possessor" },
+
+            { 16, "Boffin Elder" },
+            { 17, "Strong Boffin" },
+            { 14, "Gold Greenie" },
+
+            { 3, "Polterpup (Story)" },
+
+            { 4, "Polterpups (Tower)" },
+            { 5, "Big Polterpups (Tower)" },
+            { 18, "The Brain (Tower)" }
+        }.ToImmutableDictionary();
+
+        public static readonly ImmutableDictionary<int, string> TowerGhostIndices = new Dictionary<int, string>()
+        {
+            { 40, "Bomb Brothers" },
+            { 41, "Scarab Nabber" },
+            { 42, "Terrible Teleporter" },
+            { 43, "Primordial Goo" },
+            { 44, "Creeper Creator" },
+
+            { 0, "Fright Knight" },
+            { 1, "Snug Thug" },
+            { 2, "Sleek Sneaker" },
+            { 3, "Tether Jacket" },
+            { 4, "Spectral Sloth" },
+
+            { 5, "Blue Pimpernel" },
+            { 6, "Sunflower" },
+            { 7, "Pink Zinnia" },
+            { 8, "Violet" },
+            { 9, "Daisy" },
+
+            { 10, "Melon-choly" },
+            { 11, "Aweberry" },
+            { 12, "Scorn" },
+            { 13, "Fright Egg" },
+            { 14, "Terrorange" },
+
+            { 15, "Spooky Spook" },
+            { 16, "Scars" },
+            { 17, "Skoul" },
+            { 18, "Jack-goo'-lantern" },
+            { 19, "Blimp Reaper" },
+
+            { 20, "Dreadonfly" },
+            { 21, "Shadybird" },
+            { 22, "Terrorfly" },
+            { 23, "Blobberfly" },
+            { 24, "Grumble Bee" },
+
+            { 25, "Horrorca" },
+            { 26, "Clown Fishy" },
+            { 27, "Shriek Shark" },
+            { 28, "Pondguin" },
+            { 29, "Snapper" },
+
+            { 30, "Bad-minton" },
+            { 31, "American Footbrawl" },
+            { 32, "Tennis Menace" },
+            { 33, "Goolf" },
+            { 34, "Ball Hog" },
+
+            { 35, "Maligator" },
+            { 36, "Banegal" },
+            { 37, "Zebrawl" },
+            { 38, "Leoprank" },
+            { 39, "Full Moo" }
+        }.ToImmutableDictionary();
+
         public static int GetTowerModeIndex(TowerMode mode, TowerFloor floor, TowerDifficulty difficulty)
         {
             return ((int)mode * 12) + ((int)floor * 3) + (int)difficulty;
