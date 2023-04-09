@@ -8,7 +8,7 @@ namespace LM2.SaveTools
         {
             public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
             public static uint VersionCRC => 0x49270C7B;
-            public byte FurthestClearedMansion { get; set; }
+            public Mansion FurthestClearedMansion { get; set; }
             public byte FurthestClearedMission { get; set; }
             public byte HighestTowerFloor { get; set; }
             public int TotalTreasureAcquired { get; set; }
@@ -45,7 +45,7 @@ namespace LM2.SaveTools
                     }
                 }
 
-                FurthestClearedMansion = titleScreenSpan[8];
+                FurthestClearedMansion = (Mansion)titleScreenSpan[8];
                 FurthestClearedMission = titleScreenSpan[9];
                 HighestTowerFloor = titleScreenSpan[10];
                 TotalTreasureAcquired = BinaryPrimitives.ReadInt32LittleEndian(titleScreenSpan[11..15]);
@@ -71,7 +71,7 @@ namespace LM2.SaveTools
                 }
 
                 BinaryPrimitives.WriteUInt32LittleEndian(titleSaveSpan, VersionCRC);
-                titleSaveSpan[4] = FurthestClearedMansion;
+                titleSaveSpan[4] = (byte)FurthestClearedMansion;
                 titleSaveSpan[5] = FurthestClearedMission;
                 titleSaveSpan[6] = HighestTowerFloor;
                 BinaryPrimitives.WriteInt32LittleEndian(titleSaveSpan[7..11], TotalTreasureAcquired);

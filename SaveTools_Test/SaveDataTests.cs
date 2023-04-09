@@ -16,7 +16,7 @@
             SaveData.TitleScreenData obj = new(titleData);
 
             Assert.AreEqual(0x50C424C2U, obj.DataCRC);
-            Assert.AreEqual(5, obj.FurthestClearedMansion);
+            Assert.AreEqual(Mansion.KingBoosIllusion, obj.FurthestClearedMansion);
             Assert.AreEqual(0, obj.FurthestClearedMission);
             Assert.AreEqual(25, obj.HighestTowerFloor);
             Assert.AreEqual(190935, obj.TotalTreasureAcquired);
