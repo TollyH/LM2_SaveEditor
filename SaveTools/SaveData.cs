@@ -141,9 +141,9 @@ namespace LM2.SaveTools
             public bool HasSeenReviveBonePIP { get; set; }
 
             public ushort[] BestTowerClearTime { get; private set; }
-            public int EndlessModeHighestFloorReached { get; set; }
+            public byte[] EndlessModeHighestFloorReached { get; set; }
             public byte AnyModeHighestFloorReached { get; set; }
-            public int EndlessFloorsUnlocked { get; set; }
+            public bool[] EndlessFloorsUnlocked { get; set; }
             public bool RandomTowerUnlocked { get; set; }
             public byte TowerNotifyState { get; set; }
 
@@ -339,9 +339,20 @@ namespace LM2.SaveTools
                     BestTowerClearTime[i] = BinaryPrimitives.ReadUInt16LittleEndian(gameDataSpan[((i * 2) + 0xEB2)..]);
                 }
 
-                EndlessModeHighestFloorReached = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xF12..0xF16]);
+                EndlessModeHighestFloorReached = new byte[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    EndlessModeHighestFloorReached[i] = gameDataSpan[0xF12 + i];
+                }
+
                 AnyModeHighestFloorReached = gameDataSpan[0xF16];
-                EndlessFloorsUnlocked = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xF17..0xF1B]);
+
+                EndlessFloorsUnlocked = new bool[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    EndlessFloorsUnlocked[i] = gameDataSpan[0xF17 + i] == 1;
+                }
+
                 RandomTowerUnlocked = gameDataSpan[0xF1B] == 1;
                 TowerNotifyState = gameDataSpan[0xF1C];
             }
@@ -504,11 +515,15 @@ namespace LM2.SaveTools
                     BinaryPrimitives.WriteUInt16LittleEndian(gameSaveSpan[offset..], time);
                     offset += 2;
                 }
-                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], EndlessModeHighestFloorReached);
-                offset += 4;
+                foreach (byte highest in EndlessModeHighestFloorReached)
+                {
+                    gameSaveSpan[offset++] = highest;
+                }
                 gameSaveSpan[offset++] = AnyModeHighestFloorReached;
-                BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], EndlessFloorsUnlocked);
-                offset += 4;
+                foreach (bool unlocked in EndlessFloorsUnlocked)
+                {
+                    gameSaveSpan[offset++] = (byte)(unlocked ? 1 : 0);
+                }
                 gameSaveSpan[offset++] = (byte)(RandomTowerUnlocked ? 1 : 0);
                 gameSaveSpan[offset++] = TowerNotifyState;
 
