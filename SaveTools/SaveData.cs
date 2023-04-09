@@ -2,7 +2,7 @@
 
 namespace LM2.SaveTools
 {
-    public class SaveData
+    public partial class SaveData
     {
         public class TitleScreenData
         {
@@ -84,7 +84,7 @@ namespace LM2.SaveTools
             }
         }
 
-        public class GameData
+        public partial class GameData
         {
             public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
             public static uint VersionCRC => 0xD43203AD;
