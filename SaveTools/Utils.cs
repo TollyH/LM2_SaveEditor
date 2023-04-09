@@ -141,6 +141,14 @@ namespace LM2.SaveTools
             { 39, "Full Moo" }
         }.ToImmutableDictionary();
 
+        public static readonly ImmutableArray<int> GemIndexOrder = new int[13] { 7, 11, 0, 3, 2, 6, 10, 8, 4, 1, 9, 12, 5 }.ToImmutableArray();
+
+        /// <param name="gemNumber">The 0-based index of the gem based on the order shown in the vault</param>
+        public static int GetGemIndex(int gemNumber, Mansion mansion)
+        {
+            return ((int)mansion * 13) + GemIndexOrder[gemNumber];
+        }
+
         public static int GetTowerModeIndex(TowerMode mode, TowerFloor floor, TowerDifficulty difficulty)
         {
             return ((int)mode * 12) + ((int)floor * 3) + (int)difficulty;

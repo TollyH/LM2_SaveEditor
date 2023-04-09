@@ -30,4 +30,14 @@
         Hard = 1,
         Expert = 2
     }
+
+    public enum Mansion
+    {
+        GloomyManor = 0,
+        HauntedTowers = 1,
+        OldClockworks = 2,
+        SecretMine = 3,
+        TreacherousMansion = 4,
+        KingBoosIllusion = 5
+    }
 }
