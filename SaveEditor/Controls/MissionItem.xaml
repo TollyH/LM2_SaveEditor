@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="LM2.SaveEditor.Controls.MissionItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LM2.SaveEditor.Controls"
+             xmlns:lm2="clr-namespace:LM2.SaveTools;assembly=LM2_SaveTools"
+             mc:Ignorable="d" 
+             d:DesignWidth="770" d:Background="White" BorderBrush="#FF545454" BorderThickness="1">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="75px"/>
+            <ColumnDefinition x:Name="variableWidth" Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="missionNumber" Margin="10,10,0,10" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF198FC7" d:Text="A-1" FontSize="14"/>
+        <WrapPanel Grid.Column="1" Margin="0,10,0,10" Orientation="Horizontal" VerticalAlignment="Center">
+            <CheckBox x:Name="completeCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Complete?"/>
+            <CheckBox x:Name="lockedCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Locked?"/>
+            <CheckBox x:Name="booCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Boo Captured?"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Fastest Time (Seconds):"/>
+                <TextBox x:Name="fastestTimeBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Most Ghosts Captured:"/>
+                <TextBox x:Name="ghostsCapturedBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Least Damage Taken:"/>
+                <TextBox x:Name="damageTakenBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Most Treasure Collected:"/>
+                <TextBox x:Name="treasureCollectedBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Grade:"/>
+                <ComboBox x:Name="gradeCombo" VerticalAlignment="Center">
+                    <ComboBoxItem Content="Bronze" Tag="{x:Static lm2:Grade.Bronze}"/>
+                    <ComboBoxItem Content="Silver" Tag="{x:Static lm2:Grade.Silver}"/>
+                    <ComboBoxItem Content="Gold" Tag="{x:Static lm2:Grade.Gold}"/>
+                </ComboBox>
+            </StackPanel>
+        </WrapPanel>
+    </Grid>
+</UserControl>
