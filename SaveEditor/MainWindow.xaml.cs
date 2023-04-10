@@ -20,6 +20,7 @@ namespace LM2.SaveEditor
         private void UpdateAllFields()
         {
             missionStack.Children.Clear();
+            ghostStack.Children.Clear();
 
             if (loadedSave is null)
             {
@@ -37,6 +38,16 @@ namespace LM2.SaveEditor
                     });
                 }
             }
+
+            GhostInfo[] ghosts = loadedSave.GameSaveData.GetGhostInfo();
+            foreach (int index in Utils.TowerGhostIndicesOrder)
+            {
+                string ghostName = Utils.TowerGhostIndices[index];
+                _ = ghostStack.Children.Add(new Controls.GhostItem(ghostName, ghosts[index])
+                {
+                    Tag = index
+                });
+            }
         }
 
         private void UpdateSaveData()
@@ -49,6 +60,10 @@ namespace LM2.SaveEditor
             foreach (Controls.MissionItem mission in missionStack.Children)
             {
                 loadedSave.GameSaveData.UpdateFromMissionInfo((int)mission.Tag, mission.GetMissionInfo());
+            }
+            foreach (Controls.GhostItem ghost in ghostStack.Children)
+            {
+                loadedSave.GameSaveData.UpdateFromGhostInfo((int)ghost.Tag, ghost.GetGhostInfo());
             }
         }
 
