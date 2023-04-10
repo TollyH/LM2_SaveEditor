@@ -21,6 +21,7 @@ A save editor for the 3DS game *Luigi's Mansion 2* (also known as *Luigi's Mansi
       - [(Tower) Ghosts](#tower-ghosts)
     - [Gem Indices](#gem-indices)
       - [Gem Indices for Each Mansion](#gem-indices-for-each-mansion)
+    - [Tower Mode Indices](#tower-mode-indices)
     - [CRC Checksums](#crc-checksums)
 
 ## Save File Documentation
@@ -408,6 +409,104 @@ This is a list of each mansions gem indices with the relevant offset already add
 - **Secret Mine**: `46, 50, 39, 42, 41, 45, 49, 47, 43, 40, 48, 51, 44`
 - **Treacherous Mansion**: `59, 63, 52, 55, 54, 58, 62, 60, 56, 53, 61, 64, 57`
 - **King Boo's Illusion** (Unused): `72, 76, 65, 68, 67, 71, 75, 73, 69, 66, 74, 77, 70`
+
+### Tower Mode Indices
+
+This is a list of all the possible tower configurations and their respective index in the best tower clear time array.
+
+- **Hunter/5/Normal**: 0
+- **Hunter/5/Hard**: 1
+- **Hunter/5/Expert**: 2
+
+---
+
+- **Hunter/10/Normal**: 3
+- **Hunter/10/Hard**: 4
+- **Hunter/10/Expert**: 5
+
+---
+
+- **Hunter/25/Normal**: 6
+- **Hunter/25/Hard**: 7
+- **Hunter/25/Expert**: 8
+
+---
+
+- **Hunter/Endless/Normal** (Unused): 9
+- **Hunter/Endless/Hard** (Unused): 10
+- **Hunter/Endless/Expert** (Unused): 11
+
+---
+
+- **Rush/5/Normal**: 12
+- **Rush/5/Hard**: 13
+- **Rush/5/Expert**: 14
+
+---
+
+- **Rush/10/Normal**: 15
+- **Rush/10/Hard**: 16
+- **Rush/10/Expert**: 17
+
+---
+
+- **Rush/25/Normal**: 18
+- **Rush/25/Hard**: 19
+- **Rush/25/Expert**: 20
+
+---
+
+- **Rush/Endless/Normal** (Unused): 21
+- **Rush/Endless/Hard** (Unused): 22
+- **Rush/Endless/Expert** (Unused): 23
+
+---
+
+- **Polterpup/5/Normal**: 24
+- **Polterpup/5/Hard**: 25
+- **Polterpup/5/Expert**: 26
+
+---
+
+- **Polterpup/10/Normal**: 27
+- **Polterpup/10/Hard**: 28
+- **Polterpup/10/Expert**: 29
+
+---
+
+- **Polterpup/25/Normal**: 30
+- **Polterpup/25/Hard**: 31
+- **Polterpup/25/Expert**: 32
+
+---
+
+- **Polterpup/Endless/Normal** (Unused): 33
+- **Polterpup/Endless/Hard** (Unused): 34
+- **Polterpup/Endless/Expert** (Unused): 35
+
+---
+
+- **Surprise/5/Normal**: 36
+- **Surprise/5/Hard**: 37
+- **Surprise/5/Expert**: 38
+
+---
+
+- **Surprise/10/Normal**: 39
+- **Surprise/10/Hard**: 40
+- **Surprise/10/Expert**: 41
+
+---
+
+- **Surprise/25/Normal**: 42
+- **Surprise/25/Hard**: 43
+- **Surprise/25/Expert**: 44
+
+---
+
+- **Surprise/Endless/Normal** (Unused): 45
+- **Surprise/Endless/Hard** (Unused): 46
+- **Surprise/Endless/Expert** (Unused): 47
 
 ### CRC Checksums
 
