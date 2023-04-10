@@ -19,6 +19,8 @@ A save editor for the 3DS game *Luigi's Mansion 2* (also known as *Luigi's Mansi
     - [Ghost Indices](#ghost-indices)
       - [Basic (Evershade Valley) Ghosts](#basic-evershade-valley-ghosts)
       - [(Tower) Ghosts](#tower-ghosts)
+    - [Gem Indices](#gem-indices)
+      - [Gem Indices for Each Mansion](#gem-indices-for-each-mansion)
     - [CRC Checksums](#crc-checksums)
 
 ## Save File Documentation
@@ -83,8 +85,8 @@ The following is a table of the locations of all the fields within the save file
 | 0x0D65 - 0x0DBE (0x0D4B - 0x0DA4) | Max Ghost Weight | UInt16\[45\] | See the below section on ghost indices. |
 | 0x0DBF - 0x0DEB (0x0DA5 - 0x0DD1) | Ghost Notify State | Byte\[45\] | `2` to mark as new on the UI, `0` otherwise. See the below section on ghost indices. |
 | 0x0DEC - 0x0E18 (0x0DD2 - 0x0DFE) | Ghost Notify Because Higher Weight | Byte\[45\] | No effect I could find. |
-| 0x0E19 - 0x0E66 (0x0DFF - 0x0E4C) | Gem Collected | Boolean\[78\] | `0` = gem not collected, `1` = gem collected. See the below section on gem indices. King Boo's Illusion is given 13 spaces (the same as the other mansions) in this array despite not having any gems. As such, they are always `0`, and updating them to `1` does nothing. |
-| 0x0E67 - 0x0EB4 (0x0E4D - 0x0E9A) | Gem Notify State | Byte\[78\] | `2` to mark as new on the UI, `0` otherwise. See the below section on gem indices. As with the above field, King Boo's Illusion is given space in this array. |
+| 0x0E19 - 0x0E66 (0x0DFF - 0x0E4C) | Gem Collected | Boolean\[78\] | `0` = gem not collected, `1` = gem collected. See the below section on gem indices. |
+| 0x0E67 - 0x0EB4 (0x0E4D - 0x0E9A) | Gem Notify State | Byte\[78\] | `2` to mark as new on the UI, `0` otherwise. See the below section on gem indices. |
 | 0x0EB5 (0x0E9B) | Has Poltergust | Boolean | Completely redundant as Luigi will always be given the Poltergust on levels where he should have it. Doesn't even affect A-1, as whether Luigi is given the Poltergust in A-1 is determined by whether you've completed the level before, not by this field. This does, however, remove the Poltergust from Luigi in the bunker if set to `0` (though it will reappear in animations where Luigi would normally have it). |
 | 0x0EB6 (0x0E9C) | Seen Initial Dual Scream Animation | Boolean | If this is `0`, Luigi will play his initial "aha" animation from A-1 when answering an E. Gadd call. Afterwards this will be set to `1` and the animation will play as normal for future calls. |
 | 0x0EB7 (0x0E9D) | Has Mario Been Revealed in the Story | Boolean | If `0`, Luigi will call out his usual voice clips when pressing a D-Pad button. If `1`, Luigi will instead call for Mario. In normal gameplay, this is set to `1` once Mario has been revealed at the start of E-3 (***not*** after finishing the game; a common misconception). |
@@ -383,6 +385,29 @@ The following are lists of every ghost in the game along with their associated i
 - **Zebrawl**: 37
 - **Leoprank**: 38
 - **Full Moo**: 39
+
+### Gem Indices
+
+The gem related save file arrays store every mansions' 13 gems in the same order that the mansions appear in-game. Within each mansion, however, the gems are stored in a different order to how they appear in the vault.
+
+In the order that they appear in the vault, left-to-right, top-to-bottom, the indices of each gem is in the following, consistent order: `7, 11, 0, 3, 2, 6, 10, 8, 4, 1, 9, 12, 5`.
+
+Here is an image showing this order: ![Numbered order of gems in the vault](https://github.com/TollyH/LM2_SaveEditor/blob/main/README_Images/Gem%20Indices.png)
+
+As each mansion's gems are stored one after the other with no space in-between, simply add 13 for each mansion you wish to go ahead in the array, for example +0 for Gloomy Manor, +13 for Haunted Towers, +26 for Old Clockworks, etc.
+
+Note that King Boo's Illusion is also given 13 spaces (the same as the other mansions) in the arrays despite not having any gems. Modifying any of these values does nothing.
+
+#### Gem Indices for Each Mansion
+
+This is a list of each mansions gem indices with the relevant offset already added should you need it:
+
+- **Gloomy Manor**: `7, 11, 0, 3, 2, 6, 10, 8, 4, 1, 9, 12, 5`
+- **Haunted Towers**: `20, 24, 13, 16, 15, 19, 23, 21, 17, 14, 22, 25, 18`
+- **Old Clockworks**: `33, 37, 26, 29, 28, 32, 36, 34, 30, 27, 35, 38, 31`
+- **Secret Mine**: `46, 50, 39, 42, 41, 45, 49, 47, 43, 40, 48, 51, 44`
+- **Treacherous Mansion**: `59, 63, 52, 55, 54, 58, 62, 60, 56, 53, 61, 64, 57`
+- **King Boo's Illusion** (Unused): `72, 76, 65, 68, 67, 71, 75, 73, 69, 66, 74, 77, 70`
 
 ### CRC Checksums
 
