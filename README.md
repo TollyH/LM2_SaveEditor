@@ -272,11 +272,15 @@ The following are lists of every ghost in the game along with their associated i
 - **Sneaker**: 24
 - **Creeper**: 6
 
+---
+
 - **Sister Melinda**: 26
 - **Sister Belinda**: 27
 - **Sister Herlinda**: 28
 - **Gobber**: 7
 - **Boffin**: 15
+
+---
 
 - **Strong Greenie**: 13
 - **Strong Slammer**: 2
@@ -284,15 +288,21 @@ The following are lists of every ghost in the game along with their associated i
 - **Strong Sneaker**: 25
 - **Strong Gobber**: 8
 
+---
+
 - **Grouchy Possessor**: 19
 - **Harsh Possessor**: 20
 - **Overset Possessor**: 21
 - **Scornful Possessor**: 22
 - **Tough Possessor**: 23
 
+---
+
 - **Boffin Elder**: 16
 - **Strong Boffin**: 17
 - **Gold Greenie**: 14
+
+---
 
 - **Polterpup (story)**: 3
 
@@ -310,11 +320,15 @@ The following are lists of every ghost in the game along with their associated i
 - **Primordial Goo**: 43
 - **Creeper Creator**: 44
 
+---
+
 - **Fright Knight**: 0
 - **Snug Thug**: 1
 - **Sleek Sneaker**: 2
 - **Tether Jacket**: 3
 - **Spectral Sloth**: 4
+
+---
 
 - **Blue Pimpernel**: 5
 - **Sunflower**: 6
@@ -322,11 +336,15 @@ The following are lists of every ghost in the game along with their associated i
 - **Violet**: 8
 - **Daisy**: 9
 
+---
+
 - **Melon-choly**: 10
 - **Aweberry**: 11
 - **Scorn**: 12
 - **Fright Egg**: 13
 - **Terrorange**: 14
+
+---
 
 - **Spooky Spook**: 15
 - **Scars**: 16
@@ -334,11 +352,15 @@ The following are lists of every ghost in the game along with their associated i
 - **Jack-goo'-lantern**: 18
 - **Blimp Reaper**: 19
 
+---
+
 - **Dreadonfly**: 20
 - **Shadybird**: 21
 - **Terrorfly**: 22
 - **Blobberfly**: 23
 - **Grumble Bee**: 24
+
+---
 
 - **Horrorca**: 25
 - **Clown Fishy**: 26
@@ -346,11 +368,15 @@ The following are lists of every ghost in the game along with their associated i
 - **Pondguin**: 28
 - **Snapper**: 29
 
+---
+
 - **Bad-minton**: 30
 - **American Footbrawl**: 31
 - **Tennis Menace**: 32
 - **Goolf**: 33
 - **Ball Hog**: 34
+
+---
 
 - **Maligator**: 35
 - **Banegal**: 36
