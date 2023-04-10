@@ -19,19 +19,19 @@
             <CheckBox x:Name="booCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Boo Captured?"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Fastest Time (Seconds):"/>
-                <TextBox x:Name="fastestTimeBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="fastestTimeBox" Width="70" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Most Ghosts Captured:"/>
-                <TextBox x:Name="ghostsCapturedBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="ghostsCapturedBox" Width="70" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Least Damage Taken:"/>
-                <TextBox x:Name="damageTakenBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="damageTakenBox" Width="70" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Most Treasure Collected:"/>
-                <TextBox x:Name="treasureCollectedBox" Width="50" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="treasureCollectedBox" Width="70" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="Grade:"/>
