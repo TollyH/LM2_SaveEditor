@@ -16,6 +16,9 @@ A save editor for the 3DS game *Luigi's Mansion 2* (also known as *Luigi's Mansi
       - [Secret Mine](#secret-mine)
       - [Treacherous Mansion](#treacherous-mansion)
       - [King Boo's Illusion](#king-boos-illusion)
+    - [Ghost Indices](#ghost-indices)
+      - [Basic (Evershade Valley) Ghosts](#basic-evershade-valley-ghosts)
+      - [(Tower) Ghosts](#tower-ghosts)
     - [CRC Checksums](#crc-checksums)
 
 ## Save File Documentation
@@ -256,6 +259,104 @@ The following is a list of every mission in the game along with it's associated 
 #### King Boo's Illusion
 
 - **King Boo**: 50
+
+### Ghost Indices
+
+The following are lists of every ghost in the game along with their associated index in the ghost save file arrays. In the save file field names, "basic ghosts" refer to the Evershade Valley ghosts, and "ghosts" (with no adjective) refer to the tower ghosts. A few indices are left unused, however changing the values in these locations doesn't do anything. These values are still 0-indexed, the 0 index is just left unused.
+
+#### Basic (Evershade Valley) Ghosts
+
+- **Greenie**: 12
+- **Slammer**: 1
+- **Hider**: 9
+- **Sneaker**: 24
+- **Creeper**: 6
+
+- **Sister Melinda**: 26
+- **Sister Belinda**: 27
+- **Sister Herlinda**: 28
+- **Gobber**: 7
+- **Boffin**: 15
+
+- **Strong Greenie**: 13
+- **Strong Slammer**: 2
+- **Strong Hider**: 10
+- **Strong Sneaker**: 25
+- **Strong Gobber**: 8
+
+- **Grouchy Possessor**: 19
+- **Harsh Possessor**: 20
+- **Overset Possessor**: 21
+- **Scornful Possessor**: 22
+- **Tough Possessor**: 23
+
+- **Boffin Elder**: 16
+- **Strong Boffin**: 17
+- **Gold Greenie**: 14
+
+- **Polterpup (story)**: 3
+
+*The following ghosts only appear in the tower and are in the tower section of the vault's ghost container, however information pertaining to them is stored in the Evershade Valley ghost arrays*
+
+- **Polterpups (tower)**: 4
+- **Big Polterpups**: 5
+- **The Brain**: 18
+
+#### (Tower) Ghosts
+
+- **Bomb Brothers**: 40
+- **Scarab Nabber**: 41
+- **Terrible Teleporter**: 42
+- **Primordial Goo**: 43
+- **Creeper Creator**: 44
+
+- **Fright Knight**: 0
+- **Snug Thug**: 1
+- **Sleek Sneaker**: 2
+- **Tether Jacket**: 3
+- **Spectral Sloth**: 4
+
+- **Blue Pimpernel**: 5
+- **Sunflower**: 6
+- **Pink Zinnia**: 7
+- **Violet**: 8
+- **Daisy**: 9
+
+- **Melon-choly**: 10
+- **Aweberry**: 11
+- **Scorn**: 12
+- **Fright Egg**: 13
+- **Terrorange**: 14
+
+- **Spooky Spook**: 15
+- **Scars**: 16
+- **Skoul**: 17
+- **Jack-goo'-lantern**: 18
+- **Blimp Reaper**: 19
+
+- **Dreadonfly**: 20
+- **Shadybird**: 21
+- **Terrorfly**: 22
+- **Blobberfly**: 23
+- **Grumble Bee**: 24
+
+- **Horrorca**: 25
+- **Clown Fishy**: 26
+- **Shriek Shark**: 27
+- **Pondguin**: 28
+- **Snapper**: 29
+
+- **Bad-minton**: 30
+- **American Footbrawl**: 31
+- **Tennis Menace**: 32
+- **Goolf**: 33
+- **Ball Hog**: 34
+
+- **Maligator**: 35
+- **Banegal**: 36
+- **Zebrawl**: 37
+- **Leoprank**: 38
+- **Full Moo**: 39
 
 ### CRC Checksums
 
