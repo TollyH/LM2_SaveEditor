@@ -22,6 +22,12 @@ namespace LM2.SaveEditor.Controls
             damageTakenBox.Text = missionInfo.DamageTaken.ToString();
             treasureCollectedBox.Text = missionInfo.TreasureCollected.ToString();
             gradeCombo.SelectedIndex = (int)missionInfo.Grade;
+
+            // Boss and bonus missions never have any Boos
+            if (missionLabel == "King Boo" || missionLabel.EndsWith("Boss") || missionLabel.EndsWith("Bonus"))
+            {
+                booCheckbox.IsEnabled = false;
+            }
         }
 
         /// <summary>
