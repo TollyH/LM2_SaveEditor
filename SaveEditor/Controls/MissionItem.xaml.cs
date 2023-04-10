@@ -9,18 +9,6 @@ namespace LM2.SaveEditor.Controls
     /// </summary>
     public partial class MissionItem : UserControl
     {
-        public struct MissionInfo
-        {
-            public bool Completed { get; set; }
-            public bool Locked { get; set; }
-            public bool BooCaptured { get; set; }
-            public float FastestTime { get; set; }
-            public ushort GhostsCaptured { get; set; }
-            public ushort DamageTaken { get; set; }
-            public ushort TreasureCollected { get; set; }
-            public Grade Grade { get; set; }
-        }
-
         public MissionItem(string missionLabel, MissionInfo missionInfo)
         {
             InitializeComponent();
