@@ -7,7 +7,20 @@
         mc:Ignorable="d"
         Title="Luigi's Mansion 2 Save Editor" Height="450" Width="800">
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File" Margin="2">
+                <MenuItem Header="_Open..." Click="LoadItem_Click"/>
+                <MenuItem Header="_Save" Click="SaveItem_Click"/>
+                <MenuItem Header="Save _As..." Click="SaveAsItem_Click"/>
+                <MenuItem Header="_Close File" Click="CloseItem_Click"/>
+            </MenuItem>
+        </Menu>
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="No Save File Loaded" FontSize="18"/>
+        <TabControl x:Name="mainTabControl" Grid.Row="1" Visibility="Collapsed" d:Visibility="Visible">
             <TabItem Header="Main Game">
                 <Grid>
                     <TabControl>
