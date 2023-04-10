@@ -5,8 +5,58 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SaveEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Luigi's Mansion 2 Save Editor" Height="450" Width="800">
     <Grid>
+        <TabControl>
+            <TabItem Header="Main Game">
+                <Grid>
+                    <TabControl>
+                        <TabItem Header="Missions">
+                            <Grid>
+                                <ScrollViewer Margin="10">
+                                    <StackPanel x:Name="missionStack" Orientation="Vertical"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Ghosts">
+                            <Grid>
 
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Gems and Treasure">
+                            <Grid>
+
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Tower">
+                            <Grid>
+
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Advanced">
+                            <Grid>
+                                <TabControl>
+                                    <TabItem Header="Automatic Fields">
+                                        <Grid>
+                                            
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="Unknown Fields">
+                                        <Grid>
+
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Title Screen">
+                <Grid>
+                    
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
