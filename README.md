@@ -9,6 +9,13 @@ A save editor for the 3DS game *Luigi's Mansion 2* (also known as *Luigi's Mansi
   - [Save File Documentation](#save-file-documentation)
     - [General Information](#general-information)
     - [Save File Format](#save-file-format)
+    - [Mission Indices](#mission-indices)
+      - [Gloomy Manor](#gloomy-manor)
+      - [Haunted Towers](#haunted-towers)
+      - [Old Clockworks](#old-clockworks)
+      - [Secret Mine](#secret-mine)
+      - [Treacherous Mansion](#treacherous-mansion)
+      - [King Boo's Illusion](#king-boos-illusion)
     - [CRC Checksums](#crc-checksums)
 
 ## Save File Documentation
@@ -193,6 +200,62 @@ void FUN_0037fe78(int param_1,undefined *param_2,undefined4 param_3,int param_4)
 ```
 
 I'm not 100% sure on what these functions are actually for, though they appear to be a part of invoking many things related to save data, from clearing and copying to allocated memory, to calculating checksums. I'm also not sure why the names of the fields themselves were included, though I am glad they were as it saved a lot of work figuring out the boundaries of data in the save file.
+
+### Mission Indices
+
+The following is a list of every mission in the game along with it's associated index in the mission related save file arrays. Each of these arrays is 60 elements long (10 elements for each mansion, including King Boo's Illusion), despite there only being 34 missions in the game and each mansion having at most 7 missions. Modifying the values of unused missions in any of the fields doesn't do anything.
+
+#### Gloomy Manor
+
+- **A-1**: 0
+- **A-2**: 1
+- **A-3**: 2
+- **A-4**: 3
+- **A-5**: 4
+- **A-Boss**: 5
+- **A-Bonus**: 7
+
+#### Haunted Towers
+
+- **B-1**: 10
+- **B-2**: 11
+- **B-3**: 12
+- **B-4**: 13
+- **B-5**: 14
+- **B-Boss**: 15
+- **B-Bonus**: 18
+
+#### Old Clockworks
+
+- **C-1**: 20
+- **C-2**: 21
+- **C-3**: 22
+- **C-4**: 23
+- **C-5**: 24
+- **C-Boss**: 25
+- **C-Bonus**: 27
+
+#### Secret Mine
+
+- **D-1**: 30
+- **D-2**: 31
+- **D-3**: 32
+- **D-Boss**: 35
+- **D-Bonus**: 38
+
+#### Treacherous Mansion
+
+- **E-1**: 40
+- **E-2**: 41
+- **E-3**: 42
+- **E-4**: 43
+- **E-5**: 44
+- **E-Boss**: 46
+- **E-Bonus**: 49
+
+#### King Boo's Illusion
+
+- **King Boo**: 50
 
 ### CRC Checksums
 
