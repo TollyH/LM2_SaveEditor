@@ -20,6 +20,7 @@ namespace LM2.SaveEditor
         private void UpdateAllFields()
         {
             missionStack.Children.Clear();
+            basicGhostStack.Children.Clear();
             ghostStack.Children.Clear();
 
             if (loadedSave is null)
@@ -37,6 +38,16 @@ namespace LM2.SaveEditor
                         Tag = i
                     });
                 }
+            }
+
+            BasicGhostInfo[] basicGhosts = loadedSave.GameSaveData.GetBasicGhostInfo();
+            foreach (int index in Utils.EvershadeGhostIndicesOrder)
+            {
+                string ghostName = Utils.EvershadeGhostIndices[index];
+                _ = basicGhostStack.Children.Add(new Controls.BasicGhostItem(ghostName, basicGhosts[index])
+                {
+                    Tag = index
+                });
             }
 
             GhostInfo[] ghosts = loadedSave.GameSaveData.GetGhostInfo();
@@ -60,6 +71,10 @@ namespace LM2.SaveEditor
             foreach (Controls.MissionItem mission in missionStack.Children)
             {
                 loadedSave.GameSaveData.UpdateFromMissionInfo((int)mission.Tag, mission.GetMissionInfo());
+            }
+            foreach (Controls.BasicGhostItem basicGhost in basicGhostStack.Children)
+            {
+                loadedSave.GameSaveData.UpdateFromBasicGhostInfo((int)basicGhost.Tag, basicGhost.GetBasicGhostInfo());
             }
             foreach (Controls.GhostItem ghost in ghostStack.Children)
             {

@@ -47,6 +47,16 @@ namespace LM2.SaveTools
             { 50, "King Boo" }
         }.ToImmutableDictionary();
 
+        public static readonly ImmutableList<int> EvershadeGhostIndicesOrder = ImmutableList.Create(
+            12, 1, 9, 24, 6,
+            26, 27, 28, 7, 15,
+            13, 2, 10, 25, 8,
+            19, 20, 21, 22, 23,
+            16, 17, 14,
+            3,
+            4, 5, 18
+        );
+
         public static readonly ImmutableDictionary<int, string> EvershadeGhostIndices = new Dictionary<int, string>()
         {
             { 12, "Greenie" },

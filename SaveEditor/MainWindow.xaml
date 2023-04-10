@@ -33,7 +33,9 @@
                         </TabItem>
                         <TabItem Header="Evershade Ghosts">
                             <Grid>
-
+                                <ScrollViewer Margin="10">
+                                    <StackPanel x:Name="basicGhostStack" Orientation="Vertical"/>
+                                </ScrollViewer>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Tower Ghosts">
