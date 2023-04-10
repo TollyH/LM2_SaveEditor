@@ -347,7 +347,7 @@
 
             Assert.IsTrue(obj.SeenInitialDualScreamAnimation);
 
-            Assert.AreEqual(4, obj.LastMansionPlayed);
+            Assert.AreEqual(Mansion.TreacherousMansion, obj.LastMansionPlayed);
 
             Assert.AreEqual(2, obj.TowerNotifyState);
 

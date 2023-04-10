@@ -208,7 +208,7 @@ namespace LM2.SaveTools
             public bool SeenInitialDualScreamAnimation { get; set; }
             public bool HasMarioBeenRevealedInTheStory { get; set; }
 
-            public byte LastMansionPlayed { get; set; }
+            public Mansion LastMansionPlayed { get; set; }
 
             public int TotalTreasureAcquired { get; set; }
             public int TreasureToNotifyDuringUnloading { get; set; }
@@ -404,7 +404,7 @@ namespace LM2.SaveTools
                 HasPoltergust = gameDataSpan[0xE9B] == 1;
                 SeenInitialDualScreamAnimation = gameDataSpan[0xE9C] == 1;
                 HasMarioBeenRevealedInTheStory = gameDataSpan[0xE9D] == 1;
-                LastMansionPlayed = gameDataSpan[0xE9E];
+                LastMansionPlayed = (Mansion)gameDataSpan[0xE9E];
                 TotalTreasureAcquired = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xE9F..0xEA3]);
                 TreasureToNotifyDuringUnloading = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xEA3..0xEA7]);
                 TotalGhostWeightAcquired = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xEA7..0xEAB]);
@@ -575,7 +575,7 @@ namespace LM2.SaveTools
                 gameSaveSpan[offset++] = (byte)(SeenInitialDualScreamAnimation ? 1 : 0);
                 gameSaveSpan[offset++] = (byte)(HasMarioBeenRevealedInTheStory ? 1 : 0);
 
-                gameSaveSpan[offset++] = LastMansionPlayed;
+                gameSaveSpan[offset++] = (byte)LastMansionPlayed;
 
                 BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], TotalTreasureAcquired);
                 offset += 4;
