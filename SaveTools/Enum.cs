@@ -38,6 +38,7 @@
         OldClockworks = 2,
         SecretMine = 3,
         TreacherousMansion = 4,
-        KingBoosIllusion = 5
+        KingBoosIllusion = 5,
+        None = 0xFF
     }
 }

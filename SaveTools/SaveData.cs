@@ -55,6 +55,8 @@ namespace LM2.SaveTools
                 PlaytimeSeconds = BinaryPrimitives.ReadInt64LittleEndian(titleScreenSpan[18..26]);
             }
 
+            private TitleScreenData() { }
+
             public byte[] GetBytes(bool includeDataCRC = true)
             {
                 byte[] titleSaveBytes = new byte[includeDataCRC ? 26 : 22];
@@ -81,6 +83,87 @@ namespace LM2.SaveTools
                 BinaryPrimitives.WriteInt64LittleEndian(titleSaveSpan[14..22], PlaytimeSeconds);
 
                 return titleSaveBytes;
+            }
+
+            public static TitleScreenData DetermineFromGameData(GameData gameData)
+            {
+                TitleScreenData titleScreenData = new()
+                {
+                    FurthestClearedMansion = Mansion.None,
+                    FurthestClearedMission = 0xFF,
+                    TotalTreasureAcquired = gameData.TotalTreasureAcquired,
+                    BoosCaptured = (byte)gameData.MissionBooCaptured.Count(x => x),
+                    HighestTowerFloor = gameData.AnyModeHighestFloorReached,
+                    DarkMoonPieces = 1,
+                    EGaddMedals = 0,
+                    // There is no way to determine this with GameData
+                    PlaytimeSeconds = 0
+                };
+
+                for (int i = 59; i >= 0; i--)
+                {
+                    if (gameData.MissionCompletion[i])
+                    {
+                        // Get just the tens digit of the mission index
+                        titleScreenData.FurthestClearedMansion = (Mansion)(i / 10);
+                        // Get just the rightmost digit of the mission index
+                        titleScreenData.FurthestClearedMission = (byte)(i % 10);
+                        break;
+                    }
+                }
+
+                // E-4 "Ambush Manoeuvre" provides 10 boos
+                if (gameData.MissionCompletion[43])
+                {
+                    titleScreenData.BoosCaptured += 9;
+                }
+
+                // Gloomy Manor Boss
+                if (gameData.MissionCompletion[5])
+                {
+                    titleScreenData.DarkMoonPieces++;
+                }
+                // Haunted Towers Boss
+                if (gameData.MissionCompletion[15])
+                {
+                    titleScreenData.DarkMoonPieces++;
+                }
+                // Old Clockworks Boss
+                if (gameData.MissionCompletion[25])
+                {
+                    titleScreenData.DarkMoonPieces++;
+                }
+                // Secret Mine Boss
+                if (gameData.MissionCompletion[35])
+                {
+                    titleScreenData.DarkMoonPieces++;
+                }
+                // Treacherous Mansion Boss
+                if (gameData.MissionCompletion[46])
+                {
+                    titleScreenData.DarkMoonPieces++;
+                }
+
+                // King Boo
+                if (gameData.MissionCompletion[50])
+                {
+                    titleScreenData.EGaddMedals++;
+                }
+                // Vault complete
+                if (gameData.NumBasicGhostCollected.Count(x => x > 0) >= 27
+                    && gameData.GhostCollectableState.Count(x => x == 2) >= 45
+                    && gameData.GemCollected.Count(x => x) >= 65
+                    && gameData.MissionBooCaptured.Count(x => x) >= 32)
+                {
+                    titleScreenData.EGaddMedals++;
+                }
+                // All missions at gold rank
+                if (gameData.MissionGrade.Count(x => x == Grade.Gold) >= 34)
+                {
+                    titleScreenData.EGaddMedals++;
+                }
+
+                return titleScreenData;
             }
         }
 
