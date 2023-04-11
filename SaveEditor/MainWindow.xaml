@@ -50,7 +50,7 @@
                                 <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Catch All" Padding="10,1,10,1" Margin="10,10,10,2" Click="CatchAllTowerGhosts_Click"/>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Tower">
+                        <TabItem Header="Tower Times and Floors">
                             <Grid>
 
                             </Grid>
