@@ -92,7 +92,7 @@ The following is a table of the locations of all the fields within the save file
 | 0x0EB6 (0x0E9C) | Seen Initial Dual Scream Animation | Boolean | If this is `0`, Luigi will play his initial "aha" animation from A-1 when answering an E. Gadd call. Afterwards this will be set to `1` and the animation will play as normal for future calls. |
 | 0x0EB7 (0x0E9D) | Has Mario Been Revealed in the Story | Boolean | If `0`, Luigi will call out his usual voice clips when pressing a D-Pad button. If `1`, Luigi will instead call for Mario. In normal gameplay, this is set to `1` once Mario has been revealed at the start of E-3 (***not*** after finishing the game; a common misconception). |
 | 0x0EB8 (0x0E9E) | Last Mansion Played | Byte | Determines which mansion will be initially selected on the central screen in the bunker. 0-indexed, follows the same order as in-game. |
-| 0x0EB9 - 0x0EBC (0x0E9F - 0x0EA2) | Total Treasure Acquired | Int32 | |
+| 0x0EB9 - 0x0EBC (0x0E9F - 0x0EA2) | Total Treasure Acquired | Int32 | Capped at `999999`. Higher values will be set back down. |
 | 0x0EBD - 0x0EC0 (0x0EA3 - 0x0EA6) | Treasure to Notify During Unloading | Int32 | Gets set to however much treasure you got in the last level you completed. Doesn't actually seem to affect anything though. |
 | 0x0EC1 - 0x0EC4 (0x0EA7 - 0x0EAA) | Total Ghost Weight Acquired | Int32 | |
 | 0x0EC5 (0x0EAB) | Darklight Upgrade Level | Byte | Starts at `1`, goes up to `3`. This value is prioritised over the total treasure collected, therefore setting to something lower after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
