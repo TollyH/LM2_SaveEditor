@@ -1,6 +1,7 @@
 ﻿using LM2.SaveTools;
 using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace LM2.SaveEditor
 {
@@ -12,9 +13,25 @@ namespace LM2.SaveEditor
         private SaveData? loadedSave = null;
         private string loadedSavePath = "";
 
+        private Mansion selectedGemMansion = Mansion.GloomyManor;
+
+        private readonly CheckBox[] gemCollectedCheckBoxes;
+        private readonly CheckBox[] gemNewCheckBoxes;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            gemCollectedCheckBoxes = new CheckBox[13] {
+                gemCollected0, gemCollected1, gemCollected2, gemCollected3, gemCollected4,
+                gemCollected5, gemCollected6, gemCollected7, gemCollected8,
+                gemCollected9, gemCollected10, gemCollected11, gemCollected12
+            };
+            gemNewCheckBoxes = new CheckBox[13] {
+                gemNew0, gemNew1, gemNew2, gemNew3, gemNew4,
+                gemNew5, gemNew6, gemNew7, gemNew8,
+                gemNew9, gemNew10, gemNew11, gemNew12
+            };
         }
 
         private void UpdateAllFields()
@@ -59,6 +76,24 @@ namespace LM2.SaveEditor
                     Tag = index
                 });
             }
+
+            UpdateGemCheckboxes();
+        }
+
+        private void UpdateGemCheckboxes()
+        {
+            if (loadedSave is null)
+            {
+                return;
+            }
+
+            GemInfo[] gemInfo = loadedSave.GameSaveData.GetGemInfo();
+            for (int i = 0; i < gemCollectedCheckBoxes.Length; i++)
+            {
+                GemInfo gem = gemInfo[Utils.GetGemIndex(i, selectedGemMansion)];
+                gemCollectedCheckBoxes[i].IsChecked = gem.Collected;
+                gemNewCheckBoxes[i].IsChecked = gem.IsNew;
+            }
         }
 
         private void UpdateSaveData()
@@ -79,6 +114,15 @@ namespace LM2.SaveEditor
             foreach (Controls.GhostItem ghost in ghostStack.Children)
             {
                 loadedSave.GameSaveData.UpdateFromGhostInfo((int)ghost.Tag, ghost.GetGhostInfo());
+            }
+
+            for (int i = 0; i < gemCollectedCheckBoxes.Length; i++)
+            {
+                loadedSave.GameSaveData.UpdateFromGemInfo(Utils.GetGemIndex(i, selectedGemMansion), new GemInfo()
+                {
+                    Collected = gemCollectedCheckBoxes[i].IsChecked ?? false,
+                    IsNew = gemNewCheckBoxes[i].IsChecked ?? false
+                });
             }
         }
 
@@ -137,6 +181,14 @@ namespace LM2.SaveEditor
             loadedSave = null;
             loadedSavePath = "";
             mainTabControl.Visibility = Visibility.Collapsed;
+        }
+
+        private void gemMansionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Store the gem values for the previous selected mansion in the save data so they aren't lost
+            UpdateSaveData();
+            selectedGemMansion = (Mansion)((ComboBoxItem)gemMansionCombo.SelectedItem).Tag;
+            UpdateGemCheckboxes();
         }
     }
 }

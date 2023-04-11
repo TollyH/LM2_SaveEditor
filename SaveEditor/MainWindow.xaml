@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LM2.SaveEditor"
+        xmlns:lm2="clr-namespace:LM2.SaveTools;assembly=LM2_SaveTools"
         mc:Ignorable="d"
         Title="Luigi's Mansion 2 Save Editor" Height="450" Width="800">
     <Grid>
@@ -47,7 +48,125 @@
                         </TabItem>
                         <TabItem Header="Gems and Treasure">
                             <Grid>
-
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Gems" FontSize="14" FontWeight="Bold"/>
+                                <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,5,5" Content="Mansion:"/>
+                                <ComboBox x:Name="gemMansionCombo" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,39,5,5" SelectedIndex="0" SelectionChanged="gemMansionCombo_SelectionChanged">
+                                    <ComboBoxItem Content="Gloomy Manor" Tag="{x:Static lm2:Mansion.GloomyManor}"/>
+                                    <ComboBoxItem Content="Haunted Towers" Tag="{x:Static lm2:Mansion.HauntedTowers}"/>
+                                    <ComboBoxItem Content="Old Clockworks" Tag="{x:Static lm2:Mansion.OldClockworks}"/>
+                                    <ComboBoxItem Content="Secret Mine" Tag="{x:Static lm2:Mansion.SecretMine}"/>
+                                    <ComboBoxItem Content="Treacherous Mansion" Tag="{x:Static lm2:Mansion.TreacherousMansion}"/>
+                                </ComboBox>
+                                <Grid Margin="0,75,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <CheckBox x:Name="gemCollected0" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-0.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew0" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <CheckBox x:Name="gemCollected1" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-1.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew1" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <CheckBox x:Name="gemCollected2" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-2.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew2" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="3">
+                                            <CheckBox x:Name="gemCollected3" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-3.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew3" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="4">
+                                            <CheckBox x:Name="gemCollected4" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-4.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew4" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.RowSpan="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0">
+                                            <CheckBox x:Name="gemCollected5" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-5.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew5" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="1">
+                                            <CheckBox x:Name="gemCollected6" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-6.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew6" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2">
+                                            <CheckBox x:Name="gemCollected7" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-7.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew7" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="3">
+                                            <CheckBox x:Name="gemCollected8" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-8.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew8" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <CheckBox x:Name="gemCollected9" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-9.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew9" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="1">
+                                            <CheckBox x:Name="gemCollected10" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-10.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew10" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <CheckBox x:Name="gemCollected11" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-11.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew11" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="3">
+                                            <CheckBox x:Name="gemCollected12" Margin="5" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Image Source="/Resources/Images/Gems/gem-12.png" MaxWidth="56" MaxHeight="56"/>
+                                            </CheckBox>
+                                            <CheckBox x:Name="gemNew12" Margin="5" HorizontalAlignment="Center" Content="New?"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Tower">
