@@ -1,5 +1,6 @@
 ﻿using LM2.SaveTools;
 using Microsoft.Win32;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -138,7 +139,27 @@ namespace LM2.SaveEditor
             {
                 return;
             }
-            loadedSave = FileOperations.ReadSaveData(openDialog.FileName);
+            try
+            {
+                loadedSave = FileOperations.ReadSaveData(openDialog.FileName);
+            }
+            catch (InvalidChecksumException)
+            {
+                _ = MessageBox.Show(
+                    "The provided save file has an invalid checksum. This will be automatically corrected upon saving.",
+                    "Invalid Checksum", MessageBoxButton.OK, MessageBoxImage.Warning);
+                loadedSave = FileOperations.ReadSaveData(openDialog.FileName, ignoreCRC: true);
+            }
+            catch (Exception exc)
+            {
+                _ = MessageBox.Show(
+                    "The provided save file is invalid and could not be loaded. " +
+                    "If you're using a physical 3DS system, you must have custom firmware/homebrew and a save manager such as Checkpoint installed. " +
+                    "Saves copied from the \"Nintendo 3DS\" folder on the SD card will not work." +
+                    $"\r\n\r\n{exc.GetType()}: {exc.Message}",
+                    "Invalid Save File", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             loadedSavePath = openDialog.FileName;
             mainTabControl.Visibility = Visibility.Visible;
             UpdateAllFields();
