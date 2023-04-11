@@ -293,5 +293,10 @@ namespace LM2.SaveEditor
         {
             HighlightInvalidInputs();
         }
+
+        private void ExitItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

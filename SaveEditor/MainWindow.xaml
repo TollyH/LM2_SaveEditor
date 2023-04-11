@@ -18,6 +18,8 @@
                 <MenuItem Header="_Save" Click="SaveItem_Click"/>
                 <MenuItem Header="Save _As..." Click="SaveAsItem_Click"/>
                 <MenuItem Header="_Close File" Click="CloseItem_Click"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Click="ExitItem_Click"/>
             </MenuItem>
         </Menu>
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="No Save File Loaded" FontSize="18"/>
