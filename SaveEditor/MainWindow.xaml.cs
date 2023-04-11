@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace LM2.SaveEditor
 {
@@ -78,6 +79,9 @@ namespace LM2.SaveEditor
                 });
             }
 
+            totalTreasureBox.Text = loadedSave.GameSaveData.TotalTreasureAcquired.ToString();
+            totalGhostWeightBox.Text = loadedSave.GameSaveData.TotalGhostWeightAcquired.ToString();
+
             UpdateGemCheckboxes();
         }
 
@@ -124,6 +128,38 @@ namespace LM2.SaveEditor
                     Collected = gemCollectedCheckBoxes[i].IsChecked ?? false,
                     IsNew = gemNewCheckBoxes[i].IsChecked ?? false
                 });
+            }
+
+            if (int.TryParse(totalTreasureBox.Text, out int treasure))
+            {
+                loadedSave.GameSaveData.TotalTreasureAcquired = treasure;
+            }
+            if (int.TryParse(totalGhostWeightBox.Text, out int ghostWeight))
+            {
+                loadedSave.GameSaveData.TotalGhostWeightAcquired = ghostWeight;
+            }
+        }
+
+        public void HighlightInvalidInputs()
+        {
+            Brush errorBrush = Brushes.Salmon;
+
+            if (!int.TryParse(totalTreasureBox.Text, out _))
+            {
+                totalTreasureBox.Background = errorBrush;
+            }
+            else
+            {
+                totalTreasureBox.ClearValue(BackgroundProperty);
+            }
+
+            if (!int.TryParse(totalGhostWeightBox.Text, out _))
+            {
+                totalGhostWeightBox.Background = errorBrush;
+            }
+            else
+            {
+                totalGhostWeightBox.ClearValue(BackgroundProperty);
             }
         }
 
@@ -251,6 +287,11 @@ namespace LM2.SaveEditor
             {
                 checkBox.IsChecked = true;
             }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            HighlightInvalidInputs();
         }
     }
 }
