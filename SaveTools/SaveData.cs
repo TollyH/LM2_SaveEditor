@@ -21,7 +21,7 @@ namespace LM2.SaveTools
             {
                 if (titleScreenSaveBytes.Length != 0x1A)
                 {
-                    throw new InvalidDataException(
+                    throw new InvalidSaveFormatException(
                         $"Title screen save data must be 0x1A (26) bytes long. {titleScreenSaveBytes.Length} bytes were provided.");
                 }
 
@@ -32,14 +32,14 @@ namespace LM2.SaveTools
                     uint apparentDataCRC = BinaryPrimitives.ReadUInt32LittleEndian(titleScreenSpan[..4]);
                     if (apparentDataCRC != CRC.CalculateChecksum(titleScreenSpan[4..]))
                     {
-                        throw new InvalidDataException(
+                        throw new InvalidChecksumException(
                             "Given title screen save data has an invalid data checksum. Set the ignoreCRC parameter to true to ignore this in the future.");
                     }
 
                     uint givenVersionCRC = BinaryPrimitives.ReadUInt32LittleEndian(titleScreenSpan[4..8]);
                     if (givenVersionCRC != VersionCRC)
                     {
-                        throw new InvalidDataException(
+                        throw new InvalidChecksumException(
                             "Given title screen save data has an invalid version checksum (this should always be 0x7B, 0x0C, 0x27, 0x49). " +
                             "Set the ignoreCRC parameter to true to ignore this in the future.");
                     }
@@ -234,7 +234,7 @@ namespace LM2.SaveTools
             {
                 if (gameDataBytes.Length != 0xF1D)
                 {
-                    throw new InvalidDataException(
+                    throw new InvalidSaveFormatException(
                         $"Game save data must be 0xF1D (3869) bytes long. {gameDataBytes.Length} bytes were provided.");
                 }
 
@@ -245,14 +245,14 @@ namespace LM2.SaveTools
                     uint apparentDataCRC = BinaryPrimitives.ReadUInt32LittleEndian(gameDataSpan[..4]);
                     if (apparentDataCRC != CRC.CalculateChecksum(gameDataSpan[4..]))
                     {
-                        throw new InvalidDataException(
+                        throw new InvalidChecksumException(
                             "Given game save data has an invalid data checksum. Set the ignoreCRC parameter to true to ignore this in the future.");
                     }
 
                     uint givenVersionCRC = BinaryPrimitives.ReadUInt32LittleEndian(gameDataSpan[4..8]);
                     if (givenVersionCRC != VersionCRC)
                     {
-                        throw new InvalidDataException(
+                        throw new InvalidChecksumException(
                             "Given game save data has an invalid version checksum (this should always be 0xAD, 0x03, 0x32, 0xD4). " +
                             "Set the ignoreCRC parameter to true to ignore this in the future.");
                     }
@@ -621,7 +621,7 @@ namespace LM2.SaveTools
         {
             if (saveBytes.Length != 0xF37)
             {
-                throw new InvalidDataException(
+                throw new InvalidSaveFormatException(
                     $"Save data must be 0xF37 (3895) bytes long. {saveBytes.Length} bytes were provided.");
             }
 
@@ -638,5 +638,15 @@ namespace LM2.SaveTools
 
             return saveData;
         }
+    }
+
+    public class InvalidChecksumException : Exception
+    {
+        public InvalidChecksumException(string message) : base(message) { }
+    }
+
+    public class InvalidSaveFormatException : Exception
+    {
+        public InvalidSaveFormatException(string message) : base(message) { }
     }
 }

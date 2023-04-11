@@ -39,7 +39,7 @@
                 0x00, 0x00
             };
 
-            _ = Assert.ThrowsException<InvalidDataException>(() => new SaveData.TitleScreenData(titleData));
+            _ = Assert.ThrowsException<InvalidChecksumException>(() => new SaveData.TitleScreenData(titleData));
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@
                 0x00
             };
 
-            _ = Assert.ThrowsException<InvalidDataException>(() => new SaveData.TitleScreenData(titleData));
+            _ = Assert.ThrowsException<InvalidSaveFormatException>(() => new SaveData.TitleScreenData(titleData));
         }
 
         [TestMethod]
@@ -865,7 +865,7 @@
                 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x19, 0x01, 0x00, 0x00, 0x00, 0x01, 0x02
             };
 
-            _ = Assert.ThrowsException<InvalidDataException>(() => new SaveData.GameData(gameData));
+            _ = Assert.ThrowsException<InvalidChecksumException>(() => new SaveData.GameData(gameData));
         }
 
         [TestMethod]
@@ -1369,7 +1369,7 @@
                 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x19, 0x01, 0x00, 0x00, 0x00, 0x01
             };
 
-            _ = Assert.ThrowsException<InvalidDataException>(() => new SaveData.GameData(gameData));
+            _ = Assert.ThrowsException<InvalidSaveFormatException>(() => new SaveData.GameData(gameData));
         }
 
         [TestMethod]
