@@ -153,7 +153,7 @@ namespace LM2.SaveTools
                 if (gameData.NumBasicGhostCollected.Count(x => x > 0) >= 27
                     && gameData.GhostCollectableState.Count(x => x == 2) >= 45
                     && gameData.GemCollected.Count(x => x) >= 65
-                    && gameData.MissionBooCaptured.Count(x => x) >= 32)
+                    && gameData.MissionBooCaptured.Count(x => x) >= 22)
                 {
                     titleScreenData.EGaddMedals++;
                 }
