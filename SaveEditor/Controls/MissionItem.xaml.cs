@@ -111,6 +111,30 @@ namespace LM2.SaveEditor.Controls
             }
         }
 
+        public void ChangeGradeSelection(Grade newGrade)
+        {
+            gradeCombo.SelectedIndex = (int)newGrade;
+        }
+
+        public void ChangeCompletionState(bool completed)
+        {
+            completeCheckbox.IsChecked = completed;
+        }
+
+        public void ChangeLockedState(bool locked)
+        {
+            lockedCheckbox.IsChecked = locked;
+        }
+
+        public void ChangeBooState(bool booCaught)
+        {
+            if (!booCheckbox.IsEnabled)
+            {
+                return;
+            }
+            booCheckbox.IsChecked = booCaught;
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             HighlightInvalidInputs();

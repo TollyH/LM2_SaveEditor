@@ -27,9 +27,12 @@
                     <TabControl>
                         <TabItem Header="Missions">
                             <Grid>
-                                <ScrollViewer Margin="10">
+                                <ScrollViewer Margin="10,10,10,27">
                                     <StackPanel x:Name="missionStack" Orientation="Vertical"/>
                                 </ScrollViewer>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Unlock and Complete All" Padding="10,1,10,1" Margin="10,10,10,2" Click="CompleteAllMissions_Click"/>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Grade Gold All" Padding="10,1,10,1" Margin="10,10,175,2" Click="GoldAllMissions_Click"/>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Catch All Boos" Padding="10,1,10,1" Margin="0,0,287,2" Click="CatchAllMissionBoos_Click"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Evershade Ghosts">
@@ -41,9 +44,10 @@
                         </TabItem>
                         <TabItem Header="Tower Ghosts">
                             <Grid>
-                                <ScrollViewer Margin="10">
+                                <ScrollViewer Margin="10,10,10,27">
                                     <StackPanel x:Name="ghostStack" Orientation="Vertical"/>
                                 </ScrollViewer>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Catch All" Padding="10,1,10,1" Margin="10,10,10,2" Click="CatchAllTowerGhosts_Click"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Gems and Treasure">
@@ -61,6 +65,7 @@
                                     <ComboBoxItem Content="Secret Mine" Tag="{x:Static lm2:Mansion.SecretMine}"/>
                                     <ComboBoxItem Content="Treacherous Mansion" Tag="{x:Static lm2:Mansion.TreacherousMansion}"/>
                                 </ComboBox>
+                                <Button Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,39,5,5" Content="Unlock All Gems for Mansion" Padding="10,1,10,1" Click="AllMansionGems_Click"/>
                                 <Grid Margin="0,75,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="1*"/>

@@ -70,6 +70,11 @@ namespace LM2.SaveEditor.Controls
             }
         }
 
+        public void ChangeCollectedState(bool collected)
+        {
+            collectedCheckbox.IsChecked = collected;
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             HighlightInvalidInputs();

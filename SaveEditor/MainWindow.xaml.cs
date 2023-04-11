@@ -190,5 +190,46 @@ namespace LM2.SaveEditor
             selectedGemMansion = (Mansion)((ComboBoxItem)gemMansionCombo.SelectedItem).Tag;
             UpdateGemCheckboxes();
         }
+
+        private void CompleteAllMissions_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Controls.MissionItem mission in missionStack.Children)
+            {
+                mission.ChangeLockedState(false);
+                mission.ChangeCompletionState(true);
+            }
+        }
+
+        private void GoldAllMissions_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Controls.MissionItem mission in missionStack.Children)
+            {
+                mission.ChangeGradeSelection(Grade.Gold);
+            }
+        }
+
+        private void CatchAllMissionBoos_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Controls.MissionItem mission in missionStack.Children)
+            {
+                mission.ChangeBooState(true);
+            }
+        }
+
+        private void CatchAllTowerGhosts_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Controls.GhostItem ghost in ghostStack.Children)
+            {
+                ghost.ChangeCollectedState(true);
+            }
+        }
+
+        private void AllMansionGems_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (CheckBox checkBox in gemCollectedCheckBoxes)
+            {
+                checkBox.IsChecked = true;
+            }
+        }
     }
 }
