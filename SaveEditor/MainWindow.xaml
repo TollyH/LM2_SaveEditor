@@ -196,18 +196,7 @@
                         </TabItem>
                         <TabItem Header="Advanced">
                             <Grid>
-                                <TabControl>
-                                    <TabItem Header="Automatic Fields">
-                                        <Grid>
-
-                                        </Grid>
-                                    </TabItem>
-                                    <TabItem Header="Unknown Fields">
-                                        <Grid>
-
-                                        </Grid>
-                                    </TabItem>
-                                </TabControl>
+                                
                             </Grid>
                         </TabItem>
                     </TabControl>
