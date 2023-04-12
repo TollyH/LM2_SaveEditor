@@ -1,4 +1,5 @@
 ﻿using LM2.SaveTools;
+using System;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -9,6 +10,8 @@ namespace LM2.SaveEditor.Controls
     /// </summary>
     public partial class MissionItem : UserControl
     {
+        public event Action? CompletionChecked;
+
         public MissionItem(string missionLabel, MissionInfo missionInfo)
         {
             InitializeComponent();
@@ -138,6 +141,11 @@ namespace LM2.SaveEditor.Controls
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             HighlightInvalidInputs();
+        }
+
+        private void completeCheckbox_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CompletionChecked?.Invoke();
         }
     }
 }

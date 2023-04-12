@@ -54,10 +54,16 @@ namespace LM2.SaveEditor
             {
                 if (Utils.MissionIndices.TryGetValue(i, out string? missionLabel))
                 {
-                    _ = missionStack.Children.Add(new Controls.MissionItem(missionLabel, missions[i])
+                    Controls.MissionItem item = new(missionLabel, missions[i])
                     {
                         Tag = i
-                    });
+                    };
+                    _ = missionStack.Children.Add(item);
+                    // Completion of E-3 "A Train to Catch" causes Mario to be revealed
+                    if (i == 42)
+                    {
+                        item.CompletionChecked += E3_CompletionChecked;
+                    }
                 }
             }
 
@@ -321,6 +327,11 @@ namespace LM2.SaveEditor
                 FileName = "https://github.com/TollyH/LM2_SaveEditor",
                 UseShellExecute = true
             });
+        }
+
+        private void E3_CompletionChecked()
+        {
+            marioRevealedCheckbox.IsChecked = true;
         }
     }
 }

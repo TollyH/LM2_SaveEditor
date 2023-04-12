@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="missionNumber" Margin="10,10,0,10" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF198FC7" d:Text="A-1" FontSize="14"/>
         <WrapPanel Grid.Column="1" Margin="0,10,0,10" Orientation="Horizontal" VerticalAlignment="Center">
-            <CheckBox x:Name="completeCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Complete?"/>
+            <CheckBox x:Name="completeCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Complete?" Checked="completeCheckbox_Checked"/>
             <CheckBox x:Name="lockedCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Locked?" ToolTip="If this is checked, then subsequent missions will become inaccessible, even if they are unlocked."/>
             <CheckBox x:Name="booCheckbox" Margin="10,0,0,0" VerticalAlignment="Center" Content="Boo Captured?"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
