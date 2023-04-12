@@ -138,6 +138,7 @@ void FUN_0037fa94(int param_1,undefined *param_2,undefined4 param_3,int param_4)
 The second one, used for in-game save data, is as follows:
 
 ```c
+// .text:0027fe78h (file offset: 0x0028fe78)
 void FUN_0037fe78(int param_1,undefined *param_2,undefined4 param_3,int param_4)
 {
   bool bVar1;
