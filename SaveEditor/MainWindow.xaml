@@ -6,25 +6,25 @@
         xmlns:local="clr-namespace:LM2.SaveEditor"
         xmlns:lm2="clr-namespace:LM2.SaveTools;assembly=LM2_SaveTools"
         mc:Ignorable="d"
-        Title="Luigi's Mansion 2 Save Editor" Height="450" Width="800">
+        Title="Luigi's Mansion 2 Save Editor" Height="500" Width="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="_File" Margin="2">
-                <MenuItem Header="_Open..." Click="LoadItem_Click"/>
-                <MenuItem Header="_Save" Click="SaveItem_Click"/>
-                <MenuItem Header="Save _As..." Click="SaveAsItem_Click"/>
-                <MenuItem Header="_Close File" Click="CloseItem_Click"/>
+            <MenuItem FontSize="14" Header="_File" Margin="2">
+                <MenuItem FontSize="14" Header="_Open..." Click="LoadItem_Click"/>
+                <MenuItem FontSize="14" Header="_Save" Click="SaveItem_Click"/>
+                <MenuItem FontSize="14" Header="Save _As..." Click="SaveAsItem_Click"/>
+                <MenuItem FontSize="14" Header="_Close File" Click="CloseItem_Click"/>
                 <Separator/>
-                <MenuItem Header="_Exit" Click="ExitItem_Click"/>
+                <MenuItem FontSize="14" Header="_Exit" Click="ExitItem_Click"/>
             </MenuItem>
         </Menu>
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="No Save File Loaded" FontSize="18"/>
-        <TabControl x:Name="mainTabControl" Grid.Row="1" Visibility="Collapsed" d:Visibility="Visible">
-            <TabItem Header="Main Game">
+        <TabControl x:Name="mainTabControl" Grid.Row="1" Visibility="Collapsed" d:Visibility="Visible" Margin="0,0,0,30">
+            <TabItem FontSize="14" Header="Main Game">
                 <Grid>
                     <TabControl>
                         <TabItem Header="Missions">
@@ -32,9 +32,9 @@
                                 <ScrollViewer Margin="10,10,10,27">
                                     <StackPanel x:Name="missionStack" Orientation="Vertical"/>
                                 </ScrollViewer>
-                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Unlock and Complete All" Padding="10,1,10,1" Margin="10,10,10,2" Click="CompleteAllMissions_Click"/>
-                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Grade Gold All" Padding="10,1,10,1" Margin="10,10,175,2" Click="GoldAllMissions_Click"/>
-                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Catch All Boos" Padding="10,1,10,1" Margin="0,0,287,2" Click="CatchAllMissionBoos_Click"/>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="14" Content="Unlock and Complete All" Padding="10,1,10,1" Margin="10,10,10,2" Click="CompleteAllMissions_Click"/>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="14" Content="Grade Gold All" Padding="10,1,10,1" Margin="10,10,195,2" Click="GoldAllMissions_Click"/>
+                                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="14" Content="Catch All Boos" Padding="10,1,10,1" Margin="0,0,317,2" Click="CatchAllMissionBoos_Click"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Evershade Ghosts">
@@ -199,7 +199,7 @@
                                 <TabControl>
                                     <TabItem Header="Automatic Fields">
                                         <Grid>
-                                            
+
                                         </Grid>
                                     </TabItem>
                                     <TabItem Header="Unknown Fields">
@@ -213,11 +213,13 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="Title Screen">
+            <TabItem FontSize="14" Header="Title Screen">
                 <Grid>
-                    
+
                 </Grid>
             </TabItem>
         </TabControl>
+        <TextBlock HorizontalAlignment="Left" Grid.Row="1" Margin="5" VerticalAlignment="Bottom" FontSize="14"><Run Text="Website: "/><Run TextDecorations="Underline" Foreground="Blue" Cursor="Hand" Text="https://github.com/TollyH/LM2_SaveEditor" MouseDown="WebsiteRun_MouseDown"/></TextBlock>
+        <TextBlock HorizontalAlignment="Right" Grid.Row="1" Margin="5" VerticalAlignment="Bottom" Text="Always backup your saves!" FontWeight="Bold" FontSize="14"/>
     </Grid>
 </Window>

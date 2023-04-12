@@ -1,6 +1,7 @@
 ﻿using LM2.SaveTools;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -297,6 +298,15 @@ namespace LM2.SaveEditor
         private void ExitItem_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void WebsiteRun_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _ = Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/TollyH/LM2_SaveEditor",
+                UseShellExecute = true
+            });
         }
     }
 }
