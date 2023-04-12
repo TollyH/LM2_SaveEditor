@@ -104,6 +104,11 @@ namespace LM2.SaveEditor
             endlessSurpriseFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[3].ToString();
             highestFloorBox.Text = loadedSave.GameSaveData.AnyModeHighestFloorReached.ToString();
 
+            endlessHunterUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[0];
+            endlessRushUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[1];
+            endlessPolterpupUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[2];
+            endlessSurpriseUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[3];
+
             UpdateGemCheckboxes();
         }
 
@@ -186,6 +191,11 @@ namespace LM2.SaveEditor
             {
                 loadedSave.GameSaveData.AnyModeHighestFloorReached = highestFloor;
             }
+
+            loadedSave.GameSaveData.EndlessFloorsUnlocked[0] = endlessHunterUnlockedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.EndlessFloorsUnlocked[1] = endlessRushUnlockedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.EndlessFloorsUnlocked[2] = endlessPolterpupUnlockedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.EndlessFloorsUnlocked[3] = endlessSurpriseUnlockedCheckbox.IsChecked ?? false;
         }
 
         public void HighlightInvalidInputs()
