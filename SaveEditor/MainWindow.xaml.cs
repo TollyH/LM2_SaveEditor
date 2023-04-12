@@ -97,6 +97,11 @@ namespace LM2.SaveEditor
                 .OfType<ComboBoxItem>()
                 .Where(x => (Mansion)x.Tag == loadedSave.GameSaveData.LastMansionPlayed)
                 .First();
+            
+            endlessHunterFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[0].ToString();
+            endlessRushFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[1].ToString();
+            endlessPolterpupFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[2].ToString();
+            endlessSurpriseFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[3].ToString();
 
             UpdateGemCheckboxes();
         }
@@ -159,6 +164,23 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.SeenInitialDualScreamAnimation = dualScreamCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory = marioRevealedCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.LastMansionPlayed = (Mansion)((ComboBoxItem)lastPlayedMansionCombo.SelectedItem).Tag;
+
+            if (byte.TryParse(endlessHunterFloorBox.Text, out byte hunterFloor))
+            {
+                loadedSave.GameSaveData.EndlessModeHighestFloorReached[0] = hunterFloor;
+            }
+            if (byte.TryParse(endlessRushFloorBox.Text, out byte rushFloor))
+            {
+                loadedSave.GameSaveData.EndlessModeHighestFloorReached[1] = rushFloor;
+            }
+            if (byte.TryParse(endlessPolterpupFloorBox.Text, out byte polterpupFloor))
+            {
+                loadedSave.GameSaveData.EndlessModeHighestFloorReached[2] = polterpupFloor;
+            }
+            if (byte.TryParse(endlessSurpriseFloorBox.Text, out byte surpriseFloor))
+            {
+                loadedSave.GameSaveData.EndlessModeHighestFloorReached[3] = surpriseFloor;
+            }
         }
 
         public void HighlightInvalidInputs()
@@ -181,6 +203,39 @@ namespace LM2.SaveEditor
             else
             {
                 totalGhostWeightBox.ClearValue(BackgroundProperty);
+            }
+
+            if (!byte.TryParse(endlessHunterFloorBox.Text, out _))
+            {
+                endlessHunterFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                endlessHunterFloorBox.ClearValue(BackgroundProperty);
+            }
+            if (!byte.TryParse(endlessRushFloorBox.Text, out _))
+            {
+                endlessRushFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                endlessRushFloorBox.ClearValue(BackgroundProperty);
+            }
+            if (!byte.TryParse(endlessPolterpupFloorBox.Text, out _))
+            {
+                endlessPolterpupFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                endlessPolterpupFloorBox.ClearValue(BackgroundProperty);
+            }
+            if (!byte.TryParse(endlessSurpriseFloorBox.Text, out _))
+            {
+                endlessSurpriseFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                endlessSurpriseFloorBox.ClearValue(BackgroundProperty);
             }
         }
 
