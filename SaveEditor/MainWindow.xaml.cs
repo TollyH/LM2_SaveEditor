@@ -102,6 +102,7 @@ namespace LM2.SaveEditor
             endlessRushFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[1].ToString();
             endlessPolterpupFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[2].ToString();
             endlessSurpriseFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[3].ToString();
+            highestFloorBox.Text = loadedSave.GameSaveData.AnyModeHighestFloorReached.ToString();
 
             UpdateGemCheckboxes();
         }
@@ -181,6 +182,10 @@ namespace LM2.SaveEditor
             {
                 loadedSave.GameSaveData.EndlessModeHighestFloorReached[3] = surpriseFloor;
             }
+            if (byte.TryParse(highestFloorBox.Text, out byte highestFloor))
+            {
+                loadedSave.GameSaveData.AnyModeHighestFloorReached = highestFloor;
+            }
         }
 
         public void HighlightInvalidInputs()
@@ -236,6 +241,14 @@ namespace LM2.SaveEditor
             else
             {
                 endlessSurpriseFloorBox.ClearValue(BackgroundProperty);
+            }
+            if (!byte.TryParse(highestFloorBox.Text, out _))
+            {
+                highestFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                highestFloorBox.ClearValue(BackgroundProperty);
             }
         }
 

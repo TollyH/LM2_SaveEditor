@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LM2.SaveEditor"
         xmlns:lm2="clr-namespace:LM2.SaveTools;assembly=LM2_SaveTools"
         mc:Ignorable="d"
-        Title="Luigi's Mansion 2 Save Editor" Height="500" Width="900">
+        Title="Luigi's Mansion 2 Save Editor" Height="550" Width="950">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -63,7 +63,11 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Floor Records" FontSize="14" FontWeight="Bold"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Floor Records" FontSize="14" FontWeight="Bold"/>
                                     <Label Grid.Row="1" Margin="5,29,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Endless Floor (Hunter):"/>
                                     <TextBox Grid.Row="1" x:Name="endlessHunterFloorBox" Margin="10,54,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
                                     <Label Grid.Row="1" Margin="5,71,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Endless Floor (Rush):"/>
@@ -72,6 +76,8 @@
                                     <TextBox Grid.Row="1" x:Name="endlessPolterpupFloorBox" Margin="10,139,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
                                     <Label Grid.Row="1" Margin="5,155,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Endless Floor (Surprise):"/>
                                     <TextBox Grid.Row="1" x:Name="endlessSurpriseFloorBox" Margin="10,182,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Margin="5,29,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Floor On Any Tower:"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="highestFloorBox" Margin="10,54,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
                                 </Grid>
                             </Grid>
                         </TabItem>
