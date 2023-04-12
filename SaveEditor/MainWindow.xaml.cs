@@ -83,6 +83,10 @@ namespace LM2.SaveEditor
             totalTreasureBox.Text = loadedSave.GameSaveData.TotalTreasureAcquired.ToString();
             totalGhostWeightBox.Text = loadedSave.GameSaveData.TotalGhostWeightAcquired.ToString();
 
+            optionalBooCheckbox.IsChecked = loadedSave.GameSaveData.AnyOptionalBooCaptured;
+            dualScreamCheckbox.IsChecked = loadedSave.GameSaveData.SeenInitialDualScreamAnimation;
+            marioRevealedCheckbox.IsChecked = loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory;
+
             UpdateGemCheckboxes();
         }
 
@@ -139,6 +143,10 @@ namespace LM2.SaveEditor
             {
                 loadedSave.GameSaveData.TotalGhostWeightAcquired = ghostWeight;
             }
+
+            loadedSave.GameSaveData.AnyOptionalBooCaptured = optionalBooCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.SeenInitialDualScreamAnimation = dualScreamCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory = marioRevealedCheckbox.IsChecked ?? false;
         }
 
         public void HighlightInvalidInputs()

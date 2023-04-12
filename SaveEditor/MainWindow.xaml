@@ -191,6 +191,9 @@
                                     <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Other" FontSize="14" FontWeight="Bold"/>
                                     <Label Grid.Row="1" Grid.Column="1" Margin="5,35,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Total Ghost Weight Collected:"/>
                                     <TextBox Grid.Row="1" x:Name="totalGhostWeightBox" Grid.Column="1" Margin="10,60,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
+                                    <CheckBox x:Name="optionalBooCheckbox" Grid.Row="1" Grid.Column="1" Margin="10,95,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Any optional Boos captured?" ToolTip="This has no effect on actual Boo count.&#10;If this is unchecked then E. Gadd will call Luigi after he catches a Boo to explain Boos to him.&#10;It will then be checked and this will no longer occur."/>
+                                    <CheckBox x:Name="dualScreamCheckbox" Grid.Row="1" Grid.Column="1" Margin="10,120,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Seen Dual Scream animation?" ToolTip="Whether or not Luigi has answered a call from E. Gadd before.&#10;If unchecked, for one time only, Luigi will play a slightly different animation when answering a call."/>
+                                    <CheckBox x:Name="marioRevealedCheckbox" Grid.Row="1" Grid.Column="1" Margin="10,146,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Mario revealed?" ToolTip="Whether or not Luigi will call for Mario when pressing a D-Pad button.&#10;This is normally checked after Mario is revealed at the start of E-3."/>
                                 </Grid>
                             </Grid>
                         </TabItem>
