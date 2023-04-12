@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -86,6 +87,10 @@ namespace LM2.SaveEditor
             optionalBooCheckbox.IsChecked = loadedSave.GameSaveData.AnyOptionalBooCaptured;
             dualScreamCheckbox.IsChecked = loadedSave.GameSaveData.SeenInitialDualScreamAnimation;
             marioRevealedCheckbox.IsChecked = loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory;
+            lastPlayedMansionCombo.SelectedItem = lastPlayedMansionCombo.Items
+                .OfType<ComboBoxItem>()
+                .Where(x => (Mansion)x.Tag == loadedSave.GameSaveData.LastMansionPlayed)
+                .First();
 
             UpdateGemCheckboxes();
         }
@@ -147,6 +152,7 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.AnyOptionalBooCaptured = optionalBooCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.SeenInitialDualScreamAnimation = dualScreamCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory = marioRevealedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.LastMansionPlayed = (Mansion)((ComboBoxItem)lastPlayedMansionCombo.SelectedItem).Tag;
         }
 
         public void HighlightInvalidInputs()
