@@ -108,6 +108,7 @@ namespace LM2.SaveEditor
             endlessRushUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[1];
             endlessPolterpupUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[2];
             endlessSurpriseUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[3];
+            surpriseUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.RandomTowerUnlocked;
 
             UpdateGemCheckboxes();
         }
@@ -196,6 +197,7 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.EndlessFloorsUnlocked[1] = endlessRushUnlockedCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.EndlessFloorsUnlocked[2] = endlessPolterpupUnlockedCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.EndlessFloorsUnlocked[3] = endlessSurpriseUnlockedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.RandomTowerUnlocked = surpriseUnlockedCheckbox.IsChecked ?? false;
         }
 
         public void HighlightInvalidInputs()
