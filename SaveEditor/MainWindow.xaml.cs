@@ -22,6 +22,8 @@ namespace LM2.SaveEditor
         private readonly CheckBox[] gemCollectedCheckBoxes;
         private readonly CheckBox[] gemNewCheckBoxes;
 
+        bool doAdvancedPageUpdate = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -50,6 +52,8 @@ namespace LM2.SaveEditor
                 return;
             }
 
+            doAdvancedPageUpdate = false;
+
             MissionInfo[] missions = loadedSave.GameSaveData.GetMissionInfo();
             for (int i = 0; i < missions.Length; i++)
             {
@@ -60,6 +64,12 @@ namespace LM2.SaveEditor
                         Tag = i
                     };
                     _ = missionStack.Children.Add(item);
+                    // Whether player has poltergust or not is determined by E-1 completion
+                    if (i == 0)
+                    {
+                        item.CompletionChecked += E1_CompletionChanged;
+                        item.CompletionUnchecked += E1_CompletionChanged;
+                    }
                     // Completion of E-3 "A Train to Catch" causes Mario to be revealed
                     if (i == 42)
                     {
@@ -133,7 +143,14 @@ namespace LM2.SaveEditor
                 }
             }
 
+            hasPoltergustCheckbox.IsChecked = loadedSave.GameSaveData.HasPoltergust;
+            hasSuperPoltergustCheckbox.IsChecked = loadedSave.GameSaveData.HasSuperPoltergust;
+            poltergustUpgradeSlider.Value = loadedSave.GameSaveData.PoltergustUpgradeLevel;
+            darklightUpgradeSlider.Value = loadedSave.GameSaveData.DarklightUpgradeLevel;
+
             UpdateGemCheckboxes();
+
+            doAdvancedPageUpdate = true;
         }
 
         private void UpdateGemCheckboxes()
@@ -226,6 +243,11 @@ namespace LM2.SaveEditor
             {
                 loadedSave.GameSaveData.BestTowerClearTime[(int)towerTime.Tag] = towerTime.GetTime();
             }
+
+            loadedSave.GameSaveData.HasPoltergust = hasPoltergustCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.HasSuperPoltergust = hasSuperPoltergustCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.PoltergustUpgradeLevel = (byte)poltergustUpgradeSlider.Value;
+            loadedSave.GameSaveData.DarklightUpgradeLevel = (byte)darklightUpgradeSlider.Value;
         }
 
         public void HighlightInvalidInputs()
@@ -289,6 +311,24 @@ namespace LM2.SaveEditor
             else
             {
                 highestFloorBox.ClearValue(BackgroundProperty);
+            }
+        }
+
+        private void UpdateAdvancedPage()
+        {
+            if (loadedSave is null || !doAdvancedPageUpdate)
+            {
+                return;
+            }
+
+            if (!(advancedAutoUpdateCheckbox.IsChecked ?? false))
+            {
+                UpdateSaveData();
+                hasPoltergustCheckbox.IsChecked = loadedSave.GameSaveData.ShouldLuigiHavePoltergust();
+                hasSuperPoltergustCheckbox.IsChecked = loadedSave.GameSaveData.ShouldSuperPoltergustBeUnlocked();
+
+                poltergustUpgradeSlider.Value = loadedSave.GameSaveData.IntendedPoltergustUpgradeLevel();
+                darklightUpgradeSlider.Value = loadedSave.GameSaveData.IntendedDarklightUpgradeLevel();
             }
         }
 
@@ -420,6 +460,10 @@ namespace LM2.SaveEditor
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (sender == totalTreasureBox)
+            {
+                UpdateAdvancedPage();
+            }
             HighlightInvalidInputs();
         }
 
@@ -440,6 +484,11 @@ namespace LM2.SaveEditor
         private void E3_CompletionChecked()
         {
             marioRevealedCheckbox.IsChecked = true;
+        }
+
+        private void E1_CompletionChanged()
+        {
+            UpdateAdvancedPage();
         }
 
         private void TowerTime_TimeChanged()

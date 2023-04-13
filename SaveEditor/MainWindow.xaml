@@ -242,7 +242,14 @@
                         </TabItem>
                         <TabItem Header="Advanced">
                             <Grid>
-
+                                <TextBlock Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Text="The items on this page are automatically updated based on other fields in the save file.&#10;Manually editing them is not recommended and may lead to unexpected behaviour."/>
+                                <CheckBox x:Name="advancedAutoUpdateCheckbox" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Content="Disable automatic updates to this page" Foreground="Red"/>
+                                <CheckBox x:Name="hasPoltergustCheckbox" Margin="10,57,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Has Poltergust?" IsHitTestVisible="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}"/>
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0" Content="Poltergust Upgrade Level:" Padding="0,0,0,0"/>
+                                <Slider x:Name="poltergustUpgradeSlider" Margin="180,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="1" IsHitTestVisible="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}"/>
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,110,0,0" Content="Darklight Upgrade Level:" Padding="0,0,0,0"/>
+                                <Slider x:Name="darklightUpgradeSlider" Margin="180,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="1" IsHitTestVisible="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}"/>
+                                <CheckBox x:Name="hasSuperPoltergustCheckbox" Margin="10,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Has Super Poltergust?" IsHitTestVisible="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=advancedAutoUpdateCheckbox}"/>
                             </Grid>
                         </TabItem>
                     </TabControl>

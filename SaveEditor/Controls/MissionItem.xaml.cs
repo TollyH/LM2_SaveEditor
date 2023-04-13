@@ -11,6 +11,7 @@ namespace LM2.SaveEditor.Controls
     public partial class MissionItem : UserControl
     {
         public event Action? CompletionChecked;
+        public event Action? CompletionUnchecked;
 
         public MissionItem(string missionLabel, MissionInfo missionInfo)
         {
@@ -146,6 +147,11 @@ namespace LM2.SaveEditor.Controls
         private void completeCheckbox_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
             CompletionChecked?.Invoke();
+        }
+
+        private void completeCheckbox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CompletionUnchecked?.Invoke();
         }
     }
 }
