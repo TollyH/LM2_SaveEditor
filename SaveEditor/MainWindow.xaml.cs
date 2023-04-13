@@ -123,10 +123,12 @@ namespace LM2.SaveEditor
                     {
                         int index = Utils.GetTowerModeIndex(mode, floor, difficulty);
                         string modeName = $"{Enum.GetName(mode)}/{Utils.TowerFloorNumerals[floor]}F/{Enum.GetName(difficulty)}";
-                        _ = towerTimeStack.Children.Add(new Controls.TowerTimeItem(modeName, loadedSave.GameSaveData.BestTowerClearTime[index])
+                        Controls.TowerTimeItem towerTime = new(modeName, loadedSave.GameSaveData.BestTowerClearTime[index])
                         {
                             Tag = index
-                        });
+                        };
+                        towerTime.TimeChanged += TowerTime_TimeChanged;
+                        _ = towerTimeStack.Children.Add(towerTime);
                     }
                 }
             }
@@ -438,6 +440,36 @@ namespace LM2.SaveEditor
         private void E3_CompletionChecked()
         {
             marioRevealedCheckbox.IsChecked = true;
+        }
+
+        private void TowerTime_TimeChanged()
+        {
+            if (loadedSave is null)
+            {
+                return;
+            }
+            UpdateSaveData();
+            if (loadedSave.GameSaveData.ShouldRandomTowerBeUnlocked())
+            {
+                surpriseUnlockedCheckbox.IsChecked = true;
+            }
+            bool[] unlockStates = loadedSave.GameSaveData.IntendedEndlessTowerUnlockStates();
+            if (unlockStates[0])
+            {
+                endlessHunterUnlockedCheckbox.IsChecked = true;
+            }
+            if (unlockStates[1])
+            {
+                endlessRushUnlockedCheckbox.IsChecked = true;
+            }
+            if (unlockStates[2])
+            {
+                endlessPolterpupUnlockedCheckbox.IsChecked = true;
+            }
+            if (unlockStates[3])
+            {
+                endlessSurpriseUnlockedCheckbox.IsChecked = true;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace LM2.SaveEditor.Controls
@@ -8,6 +9,8 @@ namespace LM2.SaveEditor.Controls
     /// </summary>
     public partial class TowerTimeItem : UserControl
     {
+        public event Action? TimeChanged;
+
         public TowerTimeItem(string towerModeName, ushort time)
         {
             InitializeComponent();
@@ -41,6 +44,7 @@ namespace LM2.SaveEditor.Controls
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             HighlightInvalidInputs();
+            TimeChanged?.Invoke();
         }
     }
 }

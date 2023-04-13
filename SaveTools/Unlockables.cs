@@ -52,7 +52,7 @@
                 // Have Hunter, Rush, and Polterpup modes all been completed?
                 // (on any difficulty and floor setting)
                 return BestTowerClearTime[..12].Any(x => x > 0) && BestTowerClearTime[12..24].Any(x => x > 0)
-                    && BestTowerClearTime[24..36].Any(x => x > 0) && BestTowerClearTime[36..].Any(x => x > 0);
+                    && BestTowerClearTime[24..36].Any(x => x > 0);
             }
 
             public bool[] IntendedEndlessTowerUnlockStates()
