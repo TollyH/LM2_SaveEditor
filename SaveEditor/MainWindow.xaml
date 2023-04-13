@@ -56,16 +56,20 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Time Records" FontSize="14" FontWeight="Bold"/>
+                                <ScrollViewer Margin="10,34,10,10">
+                                    <StackPanel x:Name="towerTimeStack" Orientation="Vertical"/>
+                                </ScrollViewer>
                                 <Grid Grid.Column="1">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Content="Floor Records" FontSize="14" FontWeight="Bold"/>
                                     <Label Grid.Row="0" Margin="5,29,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Endless Floor (Hunter):"/>

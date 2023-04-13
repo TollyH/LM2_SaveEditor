@@ -43,6 +43,7 @@ namespace LM2.SaveEditor
             missionStack.Children.Clear();
             basicGhostStack.Children.Clear();
             ghostStack.Children.Clear();
+            towerTimeStack.Children.Clear();
 
             if (loadedSave is null)
             {
@@ -109,6 +110,26 @@ namespace LM2.SaveEditor
             endlessPolterpupUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[2];
             endlessSurpriseUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.EndlessFloorsUnlocked[3];
             surpriseUnlockedCheckbox.IsChecked = loadedSave.GameSaveData.RandomTowerUnlocked;
+
+            foreach (TowerMode mode in Enum.GetValues<TowerMode>())
+            {
+                foreach (TowerFloor floor in Enum.GetValues<TowerFloor>())
+                {
+                    if (floor == TowerFloor.Endless)
+                    {
+                        continue;
+                    }
+                    foreach (TowerDifficulty difficulty in Enum.GetValues<TowerDifficulty>())
+                    {
+                        int index = Utils.GetTowerModeIndex(mode, floor, difficulty);
+                        string modeName = $"{Enum.GetName(mode)}/{Utils.TowerFloorNumerals[floor]}F/{Enum.GetName(difficulty)}";
+                        _ = towerTimeStack.Children.Add(new Controls.TowerTimeItem(modeName, loadedSave.GameSaveData.BestTowerClearTime[index])
+                        {
+                            Tag = index
+                        });
+                    }
+                }
+            }
 
             UpdateGemCheckboxes();
         }
@@ -198,6 +219,11 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.EndlessFloorsUnlocked[2] = endlessPolterpupUnlockedCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.EndlessFloorsUnlocked[3] = endlessSurpriseUnlockedCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.RandomTowerUnlocked = surpriseUnlockedCheckbox.IsChecked ?? false;
+
+            foreach (Controls.TowerTimeItem towerTime in towerTimeStack.Children)
+            {
+                loadedSave.GameSaveData.BestTowerClearTime[(int)towerTime.Tag] = towerTime.GetTime();
+            }
         }
 
         public void HighlightInvalidInputs()

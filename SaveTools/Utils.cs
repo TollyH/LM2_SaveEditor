@@ -171,6 +171,14 @@ namespace LM2.SaveTools
             return ((int)mansion * 13) + GemIndexOrder[gemNumber];
         }
 
+        public static readonly ImmutableDictionary<TowerFloor, string> TowerFloorNumerals = new Dictionary<TowerFloor, string>()
+        {
+            { TowerFloor.Five, "5" },
+            { TowerFloor.Ten, "10" },
+            { TowerFloor.TwentyFive, "25" },
+            { TowerFloor.Endless, "Endless" }
+        }.ToImmutableDictionary();
+
         public static int GetTowerModeIndex(TowerMode mode, TowerFloor floor, TowerDifficulty difficulty)
         {
             return ((int)mode * 12) + ((int)floor * 3) + (int)difficulty;
