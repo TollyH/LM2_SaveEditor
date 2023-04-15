@@ -23,7 +23,7 @@
             </MenuItem>
         </Menu>
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="No Save File Loaded" FontSize="18"/>
-        <TabControl x:Name="mainTabControl" Grid.Row="1" Visibility="Collapsed" d:Visibility="Visible" Margin="0,0,0,30">
+        <TabControl x:Name="mainTabControl" Grid.Row="1" Visibility="Collapsed" d:Visibility="Visible" Margin="0,0,0,30" SelectionChanged="mainTabControl_SelectionChanged">
             <TabItem FontSize="14" Header="Main Game">
                 <Grid>
                     <TabControl>
@@ -257,7 +257,25 @@
             </TabItem>
             <TabItem FontSize="14" Header="Title Screen">
                 <Grid>
-
+                    <TextBlock Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Text="The items on this page determine what will be shown on the touchscreen&#10;when you hover over this profile on the profile select screen.&#10;Manually editing them will not affect anything in the main game,&#10;and is not recommended as the values will be overwitten next time the game saves."/>
+                    <CheckBox x:Name="titleAutoUpdateCheckbox" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Content="Disable automatic updates to this page" Foreground="Red"/>
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,89,0,0" Content="Furthest Played Mission:"/>
+                    <ComboBox x:Name="titleFurthestMissionCombo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,94,0,0" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}">
+                        <ComboBoxItem Content="None" Tag="{x:Static lm2:Mansion.None}"/>
+                    </ComboBox>
+                    <Label Grid.Row="0" Margin="5,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Highest Tower Floor:"/>
+                    <TextBox Grid.Row="0" x:Name="titleHighestFloorBox" Margin="10,149,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}"/>
+                    <Label Grid.Row="0" Margin="5,177,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Total Treasure Collected:"/>
+                    <TextBox x:Name="titleTreasureBox" Margin="10,206,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}"/>
+                    <Label Grid.Row="0" Margin="5,234,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Total Boos Collected:"/>
+                    <TextBox x:Name="titleBoosBox" Margin="10,263,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}"/>
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,294,0,0" Content="Dark Moon Pieces:" Padding="0,0,0,0"/>
+                    <Slider x:Name="titleDarkMoonSlider" Margin="140,294,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="1" Maximum="6" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="1" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}"/>
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,334,0,0" Content="E. Gadd Medals:" Padding="0,0,0,0"/>
+                    <Slider x:Name="titleEGaddMedalsSlider" Margin="140,334,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="0" Maximum="3" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="0" IsHitTestVisible="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}" Focusable="{Binding IsChecked, ElementName=titleAutoUpdateCheckbox}"/>
+                    <Label Grid.Row="0" Margin="5,364,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Total Playtime:"/>
+                    <TextBox x:Name="titlePlaytimeBox" Margin="10,394,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" TextChanged="TextBox_TextChanged"/>
+                    <Label Grid.Row="0" Margin="180,394,0,0" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Unlike the other title screen items, this is the only place that total playtime can be modified." Foreground="#FF2F9A00"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -22,7 +22,7 @@ namespace LM2.SaveEditor
         private readonly CheckBox[] gemCollectedCheckBoxes;
         private readonly CheckBox[] gemNewCheckBoxes;
 
-        bool doAdvancedPageUpdate = false;
+        bool doAutoPageUpdate = false;
 
         public MainWindow()
         {
@@ -38,6 +38,15 @@ namespace LM2.SaveEditor
                 gemNew5, gemNew6, gemNew7, gemNew8,
                 gemNew9, gemNew10, gemNew11, gemNew12
             };
+
+            foreach ((int index, string name) in Utils.MissionIndices)
+            {
+                _ = titleFurthestMissionCombo.Items.Add(new ComboBoxItem()
+                {
+                    Content = name,
+                    Tag = index
+                });
+            }
         }
 
         private void UpdateAllFields()
@@ -52,7 +61,7 @@ namespace LM2.SaveEditor
                 return;
             }
 
-            doAdvancedPageUpdate = false;
+            doAutoPageUpdate = false;
 
             MissionInfo[] missions = loadedSave.GameSaveData.GetMissionInfo();
             for (int i = 0; i < missions.Length; i++)
@@ -107,7 +116,7 @@ namespace LM2.SaveEditor
             lastPlayedMansionCombo.SelectedItem = lastPlayedMansionCombo.Items
                 .OfType<ComboBoxItem>()
                 .Where(x => (Mansion)x.Tag == loadedSave.GameSaveData.LastMansionPlayed)
-                .First();
+                .FirstOrDefault();
             
             endlessHunterFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[0].ToString();
             endlessRushFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[1].ToString();
@@ -150,7 +159,27 @@ namespace LM2.SaveEditor
 
             UpdateGemCheckboxes();
 
-            doAdvancedPageUpdate = true;
+            if (loadedSave.TitleScreenSaveData.FurthestClearedMansion == Mansion.None)
+            {
+                titleFurthestMissionCombo.SelectedIndex = 0;
+            }
+            else
+            {
+                titleFurthestMissionCombo.SelectedItem = titleFurthestMissionCombo.Items
+                    .OfType<ComboBoxItem>()
+                    .Where(x => (int)x.Tag ==
+                        ((int)loadedSave.TitleScreenSaveData.FurthestClearedMansion * 10)
+                        + loadedSave.TitleScreenSaveData.FurthestClearedMission)
+                    .FirstOrDefault();
+            }
+            titleHighestFloorBox.Text = loadedSave.TitleScreenSaveData.HighestTowerFloor.ToString();
+            titleTreasureBox.Text = loadedSave.TitleScreenSaveData.TotalTreasureAcquired.ToString();
+            titleBoosBox.Text = loadedSave.TitleScreenSaveData.BoosCaptured.ToString();
+            titleDarkMoonSlider.Value = loadedSave.TitleScreenSaveData.DarkMoonPieces;
+            titleEGaddMedalsSlider.Value = loadedSave.TitleScreenSaveData.EGaddMedals;
+            titlePlaytimeBox.Text = loadedSave.TitleScreenSaveData.PlaytimeSeconds.ToString();
+
+            doAutoPageUpdate = true;
         }
 
         private void UpdateGemCheckboxes()
@@ -169,7 +198,7 @@ namespace LM2.SaveEditor
             }
         }
 
-        private void UpdateSaveData()
+        private void UpdateSaveData(bool titleSaveData = true)
         {
             if (loadedSave is null)
             {
@@ -248,6 +277,46 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.HasSuperPoltergust = hasSuperPoltergustCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.PoltergustUpgradeLevel = (byte)poltergustUpgradeSlider.Value;
             loadedSave.GameSaveData.DarklightUpgradeLevel = (byte)darklightUpgradeSlider.Value;
+
+            if (titleSaveData)
+            {
+                UpdateTitlePage();
+
+                if (titleFurthestMissionCombo.SelectedIndex == 0)
+                {
+                    loadedSave.TitleScreenSaveData.FurthestClearedMansion = Mansion.None;
+                    loadedSave.TitleScreenSaveData.FurthestClearedMission = 0xFF;
+                }
+                else
+                {
+                    ComboBoxItem selectedItem = (ComboBoxItem)titleFurthestMissionCombo.SelectedItem;
+                    loadedSave.TitleScreenSaveData.FurthestClearedMansion = (Mansion)((int)selectedItem.Tag / 10);
+                    loadedSave.TitleScreenSaveData.FurthestClearedMission = (byte)((int)selectedItem.Tag % 10);
+                }
+
+                if (byte.TryParse(titleHighestFloorBox.Text, out byte titleHighestFloor))
+                {
+                    loadedSave.TitleScreenSaveData.HighestTowerFloor = titleHighestFloor;
+                }
+
+                if (int.TryParse(titleTreasureBox.Text, out int totalTreasure))
+                {
+                    loadedSave.TitleScreenSaveData.TotalTreasureAcquired = totalTreasure;
+                }
+
+                if (byte.TryParse(titleBoosBox.Text, out byte boosCaptured))
+                {
+                    loadedSave.TitleScreenSaveData.BoosCaptured = boosCaptured;
+                }
+
+                loadedSave.TitleScreenSaveData.DarkMoonPieces = (byte)titleDarkMoonSlider.Value;
+                loadedSave.TitleScreenSaveData.EGaddMedals = (byte)titleEGaddMedalsSlider.Value;
+
+                if (long.TryParse(titlePlaytimeBox.Text, out long playtimeSeconds))
+                {
+                    loadedSave.TitleScreenSaveData.PlaytimeSeconds = playtimeSeconds;
+                }
+            }
         }
 
         public void HighlightInvalidInputs()
@@ -312,11 +381,44 @@ namespace LM2.SaveEditor
             {
                 highestFloorBox.ClearValue(BackgroundProperty);
             }
+
+            if (!byte.TryParse(titleHighestFloorBox.Text, out _))
+            {
+                titleHighestFloorBox.Background = errorBrush;
+            }
+            else
+            {
+                titleHighestFloorBox.ClearValue(BackgroundProperty);
+            }
+            if (!int.TryParse(titleTreasureBox.Text, out _))
+            {
+                titleTreasureBox.Background = errorBrush;
+            }
+            else
+            {
+                titleTreasureBox.ClearValue(BackgroundProperty);
+            }
+            if (!byte.TryParse(titleBoosBox.Text, out _))
+            {
+                titleBoosBox.Background = errorBrush;
+            }
+            else
+            {
+                titleBoosBox.ClearValue(BackgroundProperty);
+            }
+            if (!long.TryParse(titlePlaytimeBox.Text, out _))
+            {
+                titlePlaytimeBox.Background = errorBrush;
+            }
+            else
+            {
+                titlePlaytimeBox.ClearValue(BackgroundProperty);
+            }
         }
 
         private void UpdateAdvancedPage()
         {
-            if (loadedSave is null || !doAdvancedPageUpdate)
+            if (loadedSave is null || !doAutoPageUpdate)
             {
                 return;
             }
@@ -329,6 +431,38 @@ namespace LM2.SaveEditor
 
                 poltergustUpgradeSlider.Value = loadedSave.GameSaveData.IntendedPoltergustUpgradeLevel();
                 darklightUpgradeSlider.Value = loadedSave.GameSaveData.IntendedDarklightUpgradeLevel();
+            }
+        }
+
+        private void UpdateTitlePage()
+        {
+            if (loadedSave is null || !doAutoPageUpdate)
+            {
+                return;
+            }
+
+            if (!(titleAutoUpdateCheckbox.IsChecked ?? false))
+            {
+                UpdateSaveData(titleSaveData: false);
+                SaveData.TitleScreenData calculatedTitleData = SaveData.TitleScreenData.DetermineFromGameData(loadedSave.GameSaveData);
+                if (calculatedTitleData.FurthestClearedMansion == Mansion.None)
+                {
+                    titleFurthestMissionCombo.SelectedIndex = 0;
+                }
+                else
+                {
+                    titleFurthestMissionCombo.SelectedItem = titleFurthestMissionCombo.Items
+                        .OfType<ComboBoxItem>()
+                        .Where(x => (int)x.Tag ==
+                            ((int)calculatedTitleData.FurthestClearedMansion * 10)
+                            + calculatedTitleData.FurthestClearedMission)
+                        .FirstOrDefault();
+                }
+                titleHighestFloorBox.Text = calculatedTitleData.HighestTowerFloor.ToString();
+                titleTreasureBox.Text = calculatedTitleData.TotalTreasureAcquired.ToString();
+                titleBoosBox.Text = calculatedTitleData.BoosCaptured.ToString();
+                titleDarkMoonSlider.Value = calculatedTitleData.DarkMoonPieces;
+                titleEGaddMedalsSlider.Value = calculatedTitleData.EGaddMedals;
             }
         }
 
@@ -519,6 +653,11 @@ namespace LM2.SaveEditor
             {
                 endlessSurpriseUnlockedCheckbox.IsChecked = true;
             }
+        }
+
+        private void mainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateTitlePage();
         }
     }
 }
