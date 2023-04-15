@@ -493,7 +493,7 @@ namespace LM2.SaveEditor
             {
                 _ = MessageBox.Show(
                     "The provided save file is invalid and could not be loaded. " +
-                    "If you're using a physical 3DS system, you must have custom firmware/homebrew and a save manager such as Checkpoint installed. " +
+                    "If you're using a physical 3DS system, you must have custom firmware and/or homebrew installed, as well as a save manager such as Checkpoint. " +
                     "Saves copied from the \"Nintendo 3DS\" folder on the SD card will not work." +
                     $"\r\n\r\n{exc.GetType()}: {exc.Message}",
                     "Invalid Save File", MessageBoxButton.OK, MessageBoxImage.Error);
