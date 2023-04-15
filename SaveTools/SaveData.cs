@@ -102,6 +102,10 @@ namespace LM2.SaveTools
 
                 for (int i = 59; i >= 0; i--)
                 {
+                    if (!Utils.MissionIndices.ContainsKey(i))
+                    {
+                        continue;
+                    }
                     if (gameData.MissionCompletion[i])
                     {
                         // Get just the tens digit of the mission index
