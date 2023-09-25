@@ -21,4 +21,25 @@
     <ProjectReference Include="..\SaveTools\SaveTools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\CRC_GameData.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SaveData_FullData.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SaveData_GameData.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SaveData_GameDataBadCRC.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SaveData_GameDataWrongLengthLong.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SaveData_GameDataWrongLengthShort.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
