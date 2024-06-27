@@ -1,8 +1,10 @@
 # Luigi's Mansion 2 Save Editor
 
-A save editor for the 3DS game *Luigi's Mansion 2* (also known as *Luigi's Mansion: Dark Moon* in North American releases).
+**NOTE: I am currently in the process of adding support for the HD Switch version of the game (it shouldn't take long - the format is very similar). This editor and the README file currently only apply to the original 3DS version.**
 
-**Note: If you're using a physical 3DS system, you must have custom firmware and/or homebrew installed, as well as a save manager such as Checkpoint. Saves copied from the "Nintendo 3DS" folder on the SD card will not work.**
+A save editor for the 3DS/Switch game *Luigi's Mansion 2* (also known as *Luigi's Mansion: Dark Moon* in North American releases).
+
+**Note: If you're using a physical 3DS/Switch system, you must have custom firmware and/or homebrew installed, as well as a save manager such as Checkpoint. Saves copied directly from the SD card will not work.**
 
 **ALWAYS keep a backup of your save files *before* using a save editor. In the unlikely event that this editor causes you to lose your save data, I cannot be held responsible.**
 
