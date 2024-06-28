@@ -7,9 +7,9 @@
             return new SaveData(File.ReadAllBytes(filepath), ignoreCRC);
         }
 
-        public static void WriteSaveData(string filepath, SaveData saveData)
+        public static void WriteSaveData(string filepath, SaveData saveData, bool switchVersion)
         {
-            File.WriteAllBytes(filepath, saveData.GetBytes());
+            File.WriteAllBytes(filepath, saveData.GetBytes(switchVersion));
         }
     }
 }

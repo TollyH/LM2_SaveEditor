@@ -240,6 +240,22 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
+                        <TabItem Header="Options (Switch Only)">
+                            <Grid>
+                                <CheckBox x:Name="rumbleCheckbox" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="HD Rumble"/>
+                                <CheckBox x:Name="gyroscopeCheckbox" Margin="10,35,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Motion Sensor"/>
+                                <CheckBox x:Name="rOmnidirectionCheckbox" Margin="10,60,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Right Stick Omnidirectional"/>
+                                <CheckBox x:Name="xInvertedCheckbox" Margin="10,85,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="X-Axis Inverted"/>
+                                <CheckBox x:Name="yInvertedCheckbox" Margin="10,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Y-Axis Inverted"/>
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,135,0,0" Content="1st-Person Motion-Sensor Sensitivity:" Padding="0,0,0,0"/>
+                                <Slider x:Name="gyroscopeSensitivitySlider" Margin="250,135,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="1"/>
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,165,0,0" Content="1st-Person Stick Sensitivity:" Padding="0,0,0,0"/>
+                                <Slider x:Name="stickSensitivitySlider" Margin="250,165,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="1"/>
+                                <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,195,0,0" Content="TV Mode Brightness:" Padding="0,0,0,0"/>
+                                <Slider x:Name="brightnessSlider" Margin="250,195,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Minimum="0" Maximum="4" SmallChange="1" LargeChange="1" IsSnapToTickEnabled="True" TickFrequency="1" Width="200" AutoToolTipPlacement="TopLeft" TickPlacement="TopLeft" Value="0"/>
+                                <CheckBox x:Name="minimapCheckbox" Margin="10,225,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Hide Minimap"/>
+                            </Grid>
+                        </TabItem>
                         <TabItem Header="Advanced">
                             <Grid>
                                 <TextBlock Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Text="The items on this page are automatically updated based on other fields in the save file.&#10;Manually editing them is not recommended and may lead to unexpected behaviour."/>

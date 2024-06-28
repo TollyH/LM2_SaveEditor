@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>LM2.SaveTools</RootNamespace>
@@ -10,10 +10,11 @@
     <Authors>Tolly Hill</Authors>
     <Company>Tolly Hill</Company>
     <Description>Library providing functionality to interact with Luigi's Mansion 2 save files</Description>
-    <Copyright>Copyright © 2023  Ptolemy Hill</Copyright>
+    <Copyright>Copyright © 2023-2024  Ptolemy Hill</Copyright>
     <PackageProjectUrl>https://github.com/TollyH/LM2</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TollyH/LM2</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>

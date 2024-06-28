@@ -1,9 +1,6 @@
 # Luigi's Mansion 2 Save Editor
 
-> [!IMPORTANT]
-> I am currently in the process of adding support for the HD Switch version of the game (it shouldn't take long - the format is very similar). This editor and the README file currently only apply to the original 3DS version.
-
-A save editor for the 3DS/Switch game *Luigi's Mansion 2* (also known as *Luigi's Mansion: Dark Moon* in North American releases).
+A save editor for the 3DS/Switch game *Luigi's Mansion 2* (also known as *Luigi's Mansion: Dark Moon* in North American releases). Can also be used to convert 3DS save files to Switch save files, and vice versa.
 
 > [!NOTE]
 > If you're using a physical 3DS/Switch system, you must have custom firmware and/or homebrew installed, as well as a save manager such as Checkpoint. Saves copied directly from the SD card will not work.
@@ -35,17 +32,17 @@ A save editor for the 3DS/Switch game *Luigi's Mansion 2* (also known as *Luigi'
 
 ## Save File Documentation
 
-This section of the README documents all of my findings related to how the game's save file works. You do not need to read this section to utilise the save editor, it is only for those curious as to the inner workings of the save file format. At some points I reference address offsets in the game's executable in case you wish to find relevant code/data yourself. These addresses require an ELF dump of the European version's executable to utilise. [ctr-elf](https://github.com/archshift/ctr-elf) is a good tool to get one of these (you will need an original ROM file). Reverse engineering tools compatible with ARM (such as [Ghidra](https://ghidra-sre.org/) and [IDA Pro](https://hex-rays.com/ida-pro/)) are recommended, along with the [Citra](https://citra-emu.org/) emulator to allow for easy GDB debugging and save file access.
+This section of the README documents all of my findings related to how both versions of the game's save file works. You do not need to read this section to utilise the save editor, it is only for those curious as to the inner workings of the save file format. At some points I reference address offsets in the game's executable in case you wish to find relevant code/data yourself. For the 3DS, these addresses require an ELF dump of the European version's executable to utilise.
 
 ### General Information
 
 As with many games, Luigi's Mansion 2 save files use a proprietary binary format designed specifically for the game.
 
-Each profile is stored in a separate file with the slot number being determined solely by the filename. This means that renaming a file is all you need to do to move a profile to another slot, the file contents itself does not differ at all. The files are called `profile1.sav`, `profile2.sav`, and `profile3.sav` in the order you would expect.
+Each profile is stored in a separate file with the slot number being determined solely by the filename. This means that renaming a file is all you need to do to move a profile to another slot, the file contents itself does not differ at all. On the 3DS, the files are called `profile1.sav`, `profile2.sav`, and `profile3.sav` in the order you would expect. On the Switch, they are called `profile1.txt`, `profile2.txt`, and `profile3.txt` instead. Despite the file extension, the Switch save files are *not* plain text, and remain mostly unchanged from the 3DS ones.
 
-As far as I can tell, the save file format does not differ *at all* between regions. This means, for example, you could copy a save file from the European version to the North American version and it would work identically, no modifications required. Even the so-called "Version CRC" does not change.
+As far as I can tell, the save file format does not differ *at all* between 3DS regions. This means, for example, you could copy a save file from the European version to the North American version and it would work identically, no modifications required. Even the so-called "Version CRC" does not change.
 
-The save file is split into two sections which are loaded separately by the game. The first section is 0x1A (26) bytes long and stores the information that is shown when hovering over the profile on the title screen. Changing it does not affect anything in-game. The second section is 0xF1D (3869) bytes long and stores all the information needed once loaded into a save profile. With the sole exception of total playtime, there is no data in the title screen section that cannot be determined using data already present in the in-game section.
+The save file is split into two sections which are loaded separately by the game. The first section is 0x1A (26) bytes long for both versions and stores the information that is shown when hovering over the profile on the title screen. Changing it does not affect anything in-game. The second section is 0xF1D (3869) bytes long on the 3DS and 0xF2A (3882) bytes long on the Switch. It stores all the information needed once loaded into a save profile. With the sole exception of total playtime, there is no data in the title screen section that cannot be determined using data already present in the in-game section.
 
 If the title screen section of the save file is modified without changing the relevant parameters in the in-game section of the save file, it will be overwritten with the correct values according to the in-game section when the game is next saved.
 
@@ -53,77 +50,87 @@ All numeric values in the save file are stored using the little endian byte form
 
 ### Save File Format
 
-The following is a table of the locations of all the fields within the save file, as well as any additional notes I may have on each field. The in-game section byte offsets have both the overall file offset, as well as the offset relative to the start of the in-game section in brackets.
+The following is a table of the locations of all the fields within the save file, as well as any additional notes I may have on each field. The in-game section byte offsets have both the overall file offset, as well as the offset relative to the start of the in-game section in brackets. Items marked as "N/A" in the 3DS column are new to the Switch version and are not present in the original.
 
-| Byte Offset | Field Name | Data Type | Notes |
-|-----------------------------------|--------------------------|-----------|------------------------------------------------------------------------------------|
-| **Title Screen Section** ||||
-| 0x0000 - 0x0003 | Data CRC | UInt32 | See CRC Checksums section below. |
-| 0x0004 - 0x0007 | Version CRC | UInt32 | Always `0x7B, 0x0C, 0x27, 0x49`. |
-| 0x0008 | Furthest Cleared Mansion | Byte | 0-indexed, follows the same order as in-game, `0xFF` if no mission has been cleared. |
-| 0x0009 | Furthest Cleared Mission | Byte | Uses the rightmost digit of the mission's index, see the mission indices section below. |
-| 0x000A | Highest Tower Floor | Byte | |
-| 0x000B - 0x000E | Total Treasure Acquired | Int32 | |
-| 0x000F | Boos Captured | Byte | |
-| 0x0010 | Dark Moon Pieces | Byte | Even if no missions are complete, player will always start with 1 piece. |
-| 0x0011 | E. Gadd Medals | Byte | Referred to as "stars" internally. |
-| 0x0012 - 0x0019 | Total Playtime | Int64 | Measured in seconds. Only value that cannot be determined with the in-game section. |
-| **In-Game Section** |
-| 0x001A - 0x001D (0x0000 - 0x0003) | Data CRC | UInt32 | See CRC Checksums section below. |
-| 0x001E - 0x0021 (0x0004 - 0x0007) | Version CRC | UInt32 | Always `0xAD, 0x03, 0x32, 0xD4`. |
-| 0x0022 - 0x0821 (0x0008 - 0x0807) | Discovered NIS | Unknown | NIS most likely stands for "Non-Interactable Sequences" (i.e. real-time cutscenes). Has nearly no discernable effect on the game, and I haven't been able to determine its format, so it is best to leave it unmodified. Possibly stores a list of cutscenes that have been seen for the few circumstances where cutscenes play differently if you've seen them before. The only one I'm aware of that does this is Luigi attaching the Poltergust to the vault nozzle, however, so why this needs over 2KB (over half the entire save file!) I do not know. |
-| 0x0822 - 0x085D (0x0808 - 0x0843) | Mission Completion | Boolean\[60\] | `0` = mission not complete, `1` = mission complete. See section below on mission indices. |
-| 0x085E - 0x0899 (0x0844 - 0x087F) | Mission Locked | Boolean\[60\] | `0` = mission unlocked, `1` = mission locked. See section below on mission indices. Even though it never happens legitimately, you can unlock more than one mission after the last completed one. You can also unlock missions whilst still having prior ones locked and they will be made visible, though they will be inaccessible. |
-| 0x089A - 0x08D5 (0x0880 - 0x08BB) | Mission Grade | Byte\[60\] | `0` = Bronze, `1` = Silver, `2` = Gold. See section below on mission indices. |
-| 0x08D6 - 0x0911 (0x08BC - 0x08F7) | Mission Prev Grade | Byte\[60\] | Possibly previous grade? Value doesn't seem to affect anything, keeping it the same as Mission Grade is a safe bet. See section below on mission indices. |
-| 0x0912 - 0x094D (0x08F8 - 0x0933) | Mission Boo Captured | Boolean\[60\] | `0` = Boo not captured, `1` = Boo captured. See section below on mission indices. Setting this to `1` on levels that don't have a Boo will not increase the Boo counter in the vault, but it will increase the Boos shown toward the bonus level for each mansion. E-4 "Ambush Manoeuvre" (index `43`) counts for 10 Boos instead of the usual 1 in the vault when set to `1`. It still counts as 1 toward the Treacherous Mansion bonus mission, however. |
-| 0x094E - 0x0989 (0x0934 - 0x096F) | Mission Boo Notify State | Byte\[60\] | Seems to always be between `0` and `2`. Changing it doesn't seem to do anything. |
-| 0x098A - 0x09C5 (0x0970 - 0x09AB) | Mission Notify State | Byte\[60\] | Seems to always be between `0` and `2`. Changing it doesn't seem to do anything. |
-| 0x09C6 - 0x0AB5 (0x09AC - 0x0A9B) | Mission Clear Time | Single\[60\] | Stores the **shortest** completion time. Measured in seconds. See section below on mission indices. Despite being a float, the value stored is always a whole number. |
-| 0x0AB6 - 0x0B2D (0x0A9C - 0x0B13) | Mission Ghosts Captured | UInt16\[60\] | Stores the **most** ghosts captured. See section below on mission indices. |
-| 0x0B2E - 0x0BA5 (0x0B14 - 0x0B8B) | Mission Damage Taken | UInt16\[60\] | Stores the **least** damage taken. See section below on mission indices. |
-| 0x0BA6 - 0x0C1D (0x0B8C - 0x0C03) | Mission Treasure Collected | UInt16\[60\] | Stores the **most** treasure collected. See section below on mission indices. |
-| 0x0C1E - 0x0C3A (0x0C04 - 0x0C20) | Num Basic Ghost Collected | Byte\[29\] | Caps at `99` (anything higher will be set back down). See the below section on ghost indices. *Also 99 is nowhere near enough, this really could have done with being a 16-bit integer, which considering ghost weight did, I don't know why this didn't. And for that matter why did they leave half the byte unused capping at 99 not 255? There's more than enough space on the UI for 255 and beyond. Ugh.* |
-| 0x0C3B - 0x0C74 (0x0C21 - 0x0C5A) | Max Basic Ghost Weight | UInt16\[29\] | See the below section on ghost indices. |
-| 0x0C75 - 0x0C91 (0x0C5B - 0x0C77) | Basic Ghost Notify State | Byte\[29\] | `2` to mark as new on the UI, `0` otherwise. See the below section on ghost indices. |
-| 0x0C92 - 0x0CAE (0x0C78 - 0x0C94) | Basic Ghost Notify Because Higher Weight | Byte\[29\] | No effect I could find. |
-| 0x0CAF (0x0C95) | Any Optional Boo Captured | Boolean | If this is `0` then E. Gadd will call Luigi after he catches a Boo explaining Boos to him. It will then be set to `1` and this will no longer occur. |
-| 0x0CB0 (0x0C96) | Just Collected Chaser | Boolean | I'm pretty sure "Chaser" is the internal name for the Polterpup, though changing this doesn't seem to do anything. |
-| 0x0CB1 - 0x0D0A (0x0C97 - 0x0CF0) | Ghost Weight Requirement | Unknown\[45\] | Not sure what this is for, I couldn't spot any differences after modifying. As will be explained in the section on ghost indices, this is related to the tower ghosts. |
-| 0x0D0B - 0x0D37 (0x0CF1 - 0x0D1D) | Ghost Collectable State | Byte\[45\] | `2` = caught at least once, `0` = uncaught. See the below section on ghost indices. Not sure why tower ghosts have this field when Evershade ghosts just use the number caught to determine if they've been caught before. |
-| 0x0D38 - 0x0D64 (0x0D1E - 0x0D4A) | Num Ghost Collected | Byte\[45\] | Same restrictions (and complaints) as "Num Basic Ghost Collected". See the below section on ghost indices. |
-| 0x0D65 - 0x0DBE (0x0D4B - 0x0DA4) | Max Ghost Weight | UInt16\[45\] | See the below section on ghost indices. |
-| 0x0DBF - 0x0DEB (0x0DA5 - 0x0DD1) | Ghost Notify State | Byte\[45\] | `2` to mark as new on the UI, `0` otherwise. See the below section on ghost indices. |
-| 0x0DEC - 0x0E18 (0x0DD2 - 0x0DFE) | Ghost Notify Because Higher Weight | Byte\[45\] | No effect I could find. |
-| 0x0E19 - 0x0E66 (0x0DFF - 0x0E4C) | Gem Collected | Boolean\[78\] | `0` = gem not collected, `1` = gem collected. See the below section on gem indices. |
-| 0x0E67 - 0x0EB4 (0x0E4D - 0x0E9A) | Gem Notify State | Byte\[78\] | `2` to mark as new on the UI, `0` otherwise. See the below section on gem indices. |
-| 0x0EB5 (0x0E9B) | Has Poltergust | Boolean | Completely redundant as Luigi will always be given the Poltergust on levels where he should have it. Doesn't even affect A-1, as whether Luigi is given the Poltergust in A-1 is determined by whether you've completed the level before, not by this field. This does, however, remove the Poltergust from Luigi in the bunker if set to `0` (though it will reappear in animations where Luigi would normally have it). |
-| 0x0EB6 (0x0E9C) | Seen Initial Dual Scream Animation | Boolean | If this is `0`, Luigi will play his initial "aha" animation from A-1 when answering an E. Gadd call. Afterwards this will be set to `1` and the animation will play as normal for future calls. |
-| 0x0EB7 (0x0E9D) | Has Mario Been Revealed in the Story | Boolean | If `0`, Luigi will call out his usual voice clips when pressing a D-Pad button. If `1`, Luigi will instead call for Mario. In normal gameplay, this is set to `1` once Mario has been revealed at the start of E-3 (***not*** after finishing the game; a common misconception). |
-| 0x0EB8 (0x0E9E) | Last Mansion Played | Byte | Determines which mansion will be initially selected on the central screen in the bunker, though only if the main story has been completed. If it hasn't, the furthest unlocked mansion will be selected instead. 0-indexed, follows the same order as in-game. |
-| 0x0EB9 - 0x0EBC (0x0E9F - 0x0EA2) | Total Treasure Acquired | Int32 | Capped at `999999`. Higher values will be set back down. |
-| 0x0EBD - 0x0EC0 (0x0EA3 - 0x0EA6) | Treasure to Notify During Unloading | Int32 | Gets set to however much treasure you got in the last level you completed. Doesn't actually seem to affect anything though. |
-| 0x0EC1 - 0x0EC4 (0x0EA7 - 0x0EAA) | Total Ghost Weight Acquired | Int32 | |
-| 0x0EC5 (0x0EAB) | Darklight Upgrade Level | Byte | Starts at `1`, goes up to `3`. This value is prioritised over the total treasure collected, therefore setting to something lower after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
-| 0x0EC6 (0x0EAC) | Darklight Notify State | Byte | No effect I could find. |
-| 0x0EC7 (0x0EAD) | Poltergust Upgrade Level | Byte | Starts at `1`, goes up to `3`. Does not include Super Poltergust. This value is prioritised over the total treasure collected, therefore setting to something lower after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
-| 0x0EC8 (0x0EAE) | Poltergust Notify State | Byte | No effect I could find. |
-| 0x0EC9 (0x0EAF) | Has Super Poltergust | Boolean | `0` = not unlocked, `1` = unlocked. This value is prioritised over the total treasure collected, therefore setting to `0` after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
-| 0x0ECA (0x0EB0) | Super Poltergust Notify State | Byte | No effect I could find. |
-| 0x0ECB (0x0EB1) | Has Seen Revive Bone PIP | Boolean | Most likely stores whether or not you've seen the Polterpup revive cutscene or not. I'm unsure what PIP stands for. |
-| 0x0ECC - 0x0F2B (0x0EB2 - 0x0F11) | Best Tower Clear Time | UInt16\[48\] | Each possible configuration of tower has its own best time. See section on tower mode indices. Despite not being timed overall, endless towers are given (unused) spaces in this array. |
-| 0x0F2C - 0x0F2F (0x0F12 - 0x0F15) | Endless Mode Highest Floor Reached | Byte\[4\] | Stored for each gameplay mode individually in this order: Hunter, Rush, Polterpup, Surprise. |
-| 0x0F30 (0x0F16) | Any Mode Highest Floor Reached | Byte | Likely stores the highest floor reached in any tower configuration. |
-| 0x0F31 - 0x0F34 (0x0F17 - 0x0F1A) | Endless Floors Unlocked | Boolean\[4\] | Whether or not endless mode has been unlocked for each tower gameplay mode. `0` = not unlocked, `1` = unlocked. In normal gameplay, this requires you to beat 25 floor mode on each respective gameplay mode on any difficulty setting. Stored for each gameplay mode individually in this order: Hunter, Rush, Polterpup, Surprise. |
-| 0x0F35 (0x0F1B) | Random Tower Unlocked | Boolean | Whether or not the surprise tower gameplay mode is unlocked. `0` = not unlocked, `1` = unlocked. In normal gameplay, this is unlocked after beating Hunter, Rush, and Polterpup modes on any difficulty and floor setting. |
-| 0x0F36 (0x0F1C) | Tower Notify State | Byte | No effect I could find. |
+| Byte Offset (3DS) | Byte Offset (Switch) | Field Name | Data Type | Notes |
+|-------------------|----------------------|------------|-----------|-------|
+| **Title Screen Section** |||||
+| 0x0000 - 0x0003 | 0x0000 - 0x0003 | Data CRC | UInt32 | See CRC Checksums section below. |
+| 0x0004 - 0x0007 | 0x0004 - 0x0007 | Version CRC | UInt32 | Always `0x7B, 0x0C, 0x27, 0x49` on both versions. |
+| 0x0008 | 0x0008 | Furthest Cleared Mansion | Byte | 0-indexed, follows the same order as in-game, `0xFF` if no mission has been cleared. |
+| 0x0009 | 0x0009 | Furthest Cleared Mission | Byte | Uses the rightmost digit of the mission's index, see the mission indices section below. |
+| 0x000A | 0x000A | Highest Tower Floor | Byte | |
+| 0x000B - 0x000E | 0x000B - 0x000E | Total Treasure Acquired | Int32 | |
+| 0x000F | 0x000F | Boos Captured | Byte | |
+| 0x0010 | 0x0010 | Dark Moon Pieces | Byte | Even if no missions are complete, player will always start with 1 piece. |
+| 0x0011 | 0x0011 | E. Gadd Medals | Byte | Referred to as "stars" internally. |
+| 0x0012 - 0x0019 | 0x0012 - 0x0019 | Total Playtime | Int64 | Measured in seconds. Only value that cannot be determined with the in-game section. |
+| **In-Game Section** |||||
+| 0x001A - 0x001D (0x0000 - 0x0003) | 0x001A - 0x001D (0x0000 - 0x0003) | Data CRC | UInt32 | See CRC Checksums section below. |
+| 0x001E - 0x0021 (0x0004 - 0x0007) | 0x001E - 0x0021 (0x0004 - 0x0007) | Version CRC | UInt32 | Always `0xAD, 0x03, 0x32, 0xD4` on the 3DS, `0xA5, 0xEB, 0xAA, 0x3D` on the Switch. |
+| N/A | 0x0022 - 0x0025 (0x0008 - 0x000B) | Save Game Version Number | Int32 | Currently always the number `3`. Not present on the 3DS version. |
+| 0x0022 - 0x0821 (0x0008 - 0x0807) | 0x0026 - 0x0825 (0x000C - 0x080B) | Discovered NIS | Unknown | NIS most likely stands for "Non-Interactable Sequences" (i.e. real-time cutscenes). Has nearly no discernable effect on the game, and I haven't been able to determine its format, so it is best to leave it unmodified. Possibly stores a list of cutscenes that have been seen for the few circumstances where cutscenes play differently if you've seen them before. The only one I'm aware of that does this is Luigi attaching the Poltergust to the vault nozzle, however, so why this needs over 2KB (over half the entire save file!) I do not know. |
+| 0x0822 - 0x085D (0x0808 - 0x0843) | 0x0826 - 0x0861 (0x080C - 0x0847) | Mission Completion | Boolean\[60\] | `0` = mission not complete, `1` = mission complete. See section below on mission indices. |
+| 0x085E - 0x0899 (0x0844 - 0x087F) | 0x0862 - 0x089D (0x0848 - 0x0883) | Mission Locked | Boolean\[60\] | `0` = mission unlocked, `1` = mission locked. See section below on mission indices. Even though it never happens legitimately, you can unlock more than one mission after the last completed one. You can also unlock missions whilst still having prior ones locked and they will be made visible, though they will be inaccessible. |
+| 0x089A - 0x08D5 (0x0880 - 0x08BB) | 0x089E - 0x08D9 (0x0884 - 0x08BF) | Mission Grade | Byte\[60\] | `0` = Bronze, `1` = Silver, `2` = Gold. See section below on mission indices. |
+| 0x08D6 - 0x0911 (0x08BC - 0x08F7) | 0x08DA - 0x0915 (0x08C0 - 0x08FB) | Mission Prev Grade | Byte\[60\] | Possibly previous grade? Value doesn't seem to affect anything, keeping it the same as Mission Grade is a safe bet. See section below on mission indices. |
+| 0x0912 - 0x094D (0x08F8 - 0x0933) | 0x0916 - 0x0951 (0x08FC - 0x0937) | Mission Boo Captured | Boolean\[60\] | `0` = Boo not captured, `1` = Boo captured. See section below on mission indices. Setting this to `1` on levels that don't have a Boo will not increase the Boo counter in the vault, but it will increase the Boos shown toward the bonus level for each mansion. E-4 "Ambush Manoeuvre" (index `43`) counts for 10 Boos instead of the usual 1 in the vault when set to `1`. It still counts as 1 toward the Treacherous Mansion bonus mission, however. |
+| 0x094E - 0x0989 (0x0934 - 0x096F) | 0x0952 - 0x098D (0x0938 - 0x0973) | Mission Boo Notify State | Byte\[60\] | Seems to always be between `0` and `2`. Changing it doesn't seem to do anything. |
+| 0x098A - 0x09C5 (0x0970 - 0x09AB) | 0x098E - 0x09C9 (0x0974 - 0x09AF) | Mission Notify State | Byte\[60\] | Seems to always be between `0` and `2`. Changing it doesn't seem to do anything. |
+| 0x09C6 - 0x0AB5 (0x09AC - 0x0A9B) | 0x09CA - 0x0AB9 (0x09B0 - 0x0A9F) | Mission Clear Time | Single\[60\] | Stores the **shortest** completion time. Measured in seconds. See section below on mission indices. Despite being a float, the value stored is always a whole number. |
+| 0x0AB6 - 0x0B2D (0x0A9C - 0x0B13) | 0x0ABA - 0x0B31 (0x0AA0 - 0x0B17) | Mission Ghosts Captured | UInt16\[60\] | Stores the **most** ghosts captured. See section below on mission indices. |
+| 0x0B2E - 0x0BA5 (0x0B14 - 0x0B8B) | 0x0B32 - 0x0BA9 (0x0B18 - 0x0B8F) | Mission Damage Taken | UInt16\[60\] | Stores the **least** damage taken. See section below on mission indices. |
+| 0x0BA6 - 0x0C1D (0x0B8C - 0x0C03) | 0x0BAA - 0x0C21 (0x0B90 - 0x0C07) | Mission Treasure Collected | UInt16\[60\] | Stores the **most** treasure collected. See section below on mission indices. |
+| 0x0C1E - 0x0C3A (0x0C04 - 0x0C20) | 0x0C22 - 0x0C3E (0x0C08 - 0x0C24) | Num Basic Ghost Collected | Byte\[29\] | Caps at `99` (anything higher will be set back down). See the below section on ghost indices. *Also 99 is nowhere near enough, this really could have done with being a 16-bit integer, which considering ghost weight did, I don't know why this didn't. And for that matter why did they leave half the byte unused capping at 99 not 255? There's more than enough space on the UI for 255 and beyond. Ugh.* |
+| 0x0C3B - 0x0C74 (0x0C21 - 0x0C5A) | 0x0C3F - 0x0C78 (0x0C25 - 0x0C5E) | Max Basic Ghost Weight | UInt16\[29\] | See the below section on ghost indices. |
+| 0x0C75 - 0x0C91 (0x0C5B - 0x0C77) | 0x0C79 - 0x0C95 (0x0C5F - 0x0C7B) | Basic Ghost Notify State | Byte\[29\] | `2` to mark as new on the UI, `0` otherwise. See the below section on ghost indices. |
+| 0x0C92 - 0x0CAE (0x0C78 - 0x0C94) | 0x0C96 - 0x0CB2 (0x0C7C - 0x0C98) | Basic Ghost Notify Because Higher Weight | Byte\[29\] | No effect I could find. |
+| 0x0CAF (0x0C95) | 0x0CB3 (0x0C99) | Any Optional Boo Captured | Boolean | If this is `0` then E. Gadd will call Luigi after he catches a Boo explaining Boos to him. It will then be set to `1` and this will no longer occur. |
+| 0x0CB0 (0x0C96) | 0x0CB4 (0x0C9A) | Just Collected Chaser | Boolean | I'm pretty sure "Chaser" is the internal name for the Polterpup, though changing this doesn't seem to do anything. |
+| 0x0CB1 - 0x0D0A (0x0C97 - 0x0CF0) | 0x0CB5 - 0x0D0E (0x0C9B - 0x0CF4) | Ghost Weight Requirement | Unknown\[45\] | Not sure what this is for, I couldn't spot any differences after modifying. As will be explained in the section on ghost indices, this is related to the tower ghosts. |
+| 0x0D0B - 0x0D37 (0x0CF1 - 0x0D1D) | 0x0D0F - 0x0D3B (0x0CF5 - 0x0D21) | Ghost Collectable State | Byte\[45\] | `2` = caught at least once, `0` = uncaught. See the below section on ghost indices. Not sure why tower ghosts have this field when Evershade ghosts just use the number caught to determine if they've been caught before. |
+| 0x0D38 - 0x0D64 (0x0D1E - 0x0D4A) | 0x0D3C - 0x0D68 (0x0D22 - 0x0D4E) | Num Ghost Collected | Byte\[45\] | Same restrictions (and complaints) as "Num Basic Ghost Collected". See the below section on ghost indices. |
+| 0x0D65 - 0x0DBE (0x0D4B - 0x0DA4) | 0x0D69 - 0x0DC2 (0x0D4F - 0x0DA8) | Max Ghost Weight | UInt16\[45\] | See the below section on ghost indices. |
+| 0x0DBF - 0x0DEB (0x0DA5 - 0x0DD1) | 0x0DC3 - 0x0DEF (0x0DA9 - 0x0DD5) | Ghost Notify State | Byte\[45\] | `2` to mark as new on the UI, `0` otherwise. See the below section on ghost indices. |
+| 0x0DEC - 0x0E18 (0x0DD2 - 0x0DFE) | 0x0DF0 - 0x0E1C (0x0DD6 - 0x0E02) | Ghost Notify Because Higher Weight | Byte\[45\] | No effect I could find. |
+| 0x0E19 - 0x0E66 (0x0DFF - 0x0E4C) | 0x0E1D - 0x0E6A (0x0E03 - 0x0E50) | Gem Collected | Boolean\[78\] | `0` = gem not collected, `1` = gem collected. See the below section on gem indices. |
+| 0x0E67 - 0x0EB4 (0x0E4D - 0x0E9A) | 0x0E6B - 0x0EB8 (0x0E51 - 0x0E9E) | Gem Notify State | Byte\[78\] | `2` to mark as new on the UI, `0` otherwise. See the below section on gem indices. |
+| 0x0EB5 (0x0E9B) | 0x0EB9 (0x0E9F) | Has Poltergust | Boolean | Completely redundant as Luigi will always be given the Poltergust on levels where he should have it. Doesn't even affect A-1, as whether Luigi is given the Poltergust in A-1 is determined by whether you've completed the level before, not by this field. This does, however, remove the Poltergust from Luigi in the bunker if set to `0` (though it will reappear in animations where Luigi would normally have it). |
+| 0x0EB6 (0x0E9C) | 0x0EBA (0x0EA0) | Seen Initial Dual Scream Animation | Boolean | If this is `0`, Luigi will play his initial "aha" animation from A-1 when answering an E. Gadd call. Afterwards this will be set to `1` and the animation will play as normal for future calls. |
+| 0x0EB7 (0x0E9D) | 0x0EBB (0x0EA1) | Has Mario Been Revealed in the Story | Boolean | If `0`, Luigi will call out his usual voice clips when pressing a D-Pad button. If `1`, Luigi will instead call for Mario. In normal gameplay, this is set to `1` once Mario has been revealed at the start of E-3 (***not*** after finishing the game; a common misconception). |
+| 0x0EB8 (0x0E9E) | 0x0EBC (0x0EA2) | Last Mansion Played | Byte | Determines which mansion will be initially selected on the central screen in the bunker, though only if the main story has been completed. If it hasn't, the furthest unlocked mansion will be selected instead. 0-indexed, follows the same order as in-game. |
+| 0x0EB9 - 0x0EBC (0x0E9F - 0x0EA2) | 0x0EBD - 0x0EC0 (0x0EA3 - 0x0EA6) | Total Treasure Acquired | Int32 | Capped at `999999`. Higher values will be set back down. |
+| 0x0EBD - 0x0EC0 (0x0EA3 - 0x0EA6) | 0x0EC1 - 0x0EC4 (0x0EA7 - 0x0EAA) | Treasure to Notify During Unloading | Int32 | Gets set to however much treasure you got in the last level you completed. Doesn't actually seem to affect anything though. |
+| 0x0EC1 - 0x0EC4 (0x0EA7 - 0x0EAA) | 0x0EC5 - 0x0EC8 (0x0EAB - 0x0EAE) | Total Ghost Weight Acquired | Int32 |  |
+| 0x0EC5 (0x0EAB) | 0x0EC9 (0x0EAF) | Darklight Upgrade Level | Byte | Starts at `1`, goes up to `3`. This value is prioritised over the total treasure collected, therefore setting to something lower after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
+| 0x0EC6 (0x0EAC) | 0x0ECA (0x0EB0) | Darklight Notify State | Byte | No effect I could find. |
+| 0x0EC7 (0x0EAD) | 0x0ECB (0x0EB1) | Poltergust Upgrade Level | Byte | Starts at `1`, goes up to `3`. Does not include Super Poltergust. This value is prioritised over the total treasure collected, therefore setting to something lower after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
+| 0x0EC8 (0x0EAE) | 0x0ECC (0x0EB2) | Poltergust Notify State | Byte | No effect I could find. |
+| 0x0EC9 (0x0EAF) | 0x0ECD (0x0EB3) | Has Super Poltergust | Boolean | `0` = not unlocked, `1` = unlocked. This value is prioritised over the total treasure collected, therefore setting to `0` after already being max upgraded will make it impossible to upgrade again without re-editing the save. |
+| 0x0ECA (0x0EB0) | 0x0ECE (0x0EB4) | Super Poltergust Notify State | Byte | No effect I could find. |
+| 0x0ECB (0x0EB1) | 0x0ECF (0x0EB5) | Has Seen Revive Bone PIP | Boolean | Most likely stores whether or not you've seen the Polterpup revive cutscene or not. I'm unsure what PIP stands for. |
+| 0x0ECC - 0x0F2B (0x0EB2 - 0x0F11) | 0x0ED0 - 0x0F2F (0x0EB6 - 0x0F15) | Best Tower Clear Time | UInt16\[48\] | Each possible configuration of tower has its own best time. See section on tower mode indices. Despite not being timed overall, endless towers are given (unused) spaces in this array. |
+| 0x0F2C - 0x0F2F (0x0F12 - 0x0F15) | 0x0F30 - 0x0F33 (0x0F16 - 0x0F19) | Endless Mode Highest Floor Reached | Byte\[4\] | Stored for each gameplay mode individually in this order: Hunter, Rush, Polterpup, Surprise. |
+| 0x0F30 (0x0F16) | 0x0F34 (0x0F1A) | Any Mode Highest Floor Reached | Byte | Likely stores the highest floor reached in any tower configuration. |
+| 0x0F31 - 0x0F34 (0x0F17 - 0x0F1A) | 0x0F35 - 0x0F38 (0x0F1B - 0x0F1E) | Endless Floors Unlocked | Boolean\[4\] | Whether or not endless mode has been unlocked for each tower gameplay mode. `0` = not unlocked, `1` = unlocked. In normal gameplay, this requires you to beat 25 floor mode on each respective gameplay mode on any difficulty setting. Stored for each gameplay mode individually in this order: Hunter, Rush, Polterpup, Surprise. |
+| 0x0F35 (0x0F1B) | 0x0F39 (0x0F1F) | Random Tower Unlocked | Boolean | Whether or not the surprise tower gameplay mode is unlocked. `0` = not unlocked, `1` = unlocked. In normal gameplay, this is unlocked after beating Hunter, Rush, and Polterpup modes on any difficulty and floor setting. |
+| 0x0F36 (0x0F1C) | 0x0F3A (0x0F20) | Tower Notify State | Byte | No effect I could find. |
+| N/A | 0xF3B (0xF21) | Rumble Enabled | Boolean | "HD Rumble" setting. `1` = On, `0` = Off. Not present on the 3DS version. |
+| N/A | 0xF3C (0xF22) | Gyroscope Enabled | Boolean | "Motion Sensor" setting. `1` = Enabled, `0` = Disabled. Not present on the 3DS version. |
+| N/A | 0xF3D (0xF23) | R Stick Omnidirectional | Boolean | "Right Stick" setting. `1` = Omnidirectional, `0` = Horizontal-Only. Not present on the 3DS version. |
+| N/A | 0xF3E (0xF24) | X Axis Inverted | Boolean | "X-Axis" setting. `1` = Inverted, `0` = Standard. Not present on the 3DS version. |
+| N/A | 0xF3F (0xF25) | Y Axis Inverted | Boolean | "Y-Axis" setting. `1` = Inverted, `0` = Standard. Not present on the 3DS version. |
+| N/A | 0xF40 (0xF26) | Gyroscope Sensitivity | Byte | "1st-Person Motion-Sensor Sensitivity" setting. `1` = Low, `2` = Standard, `3` = High. Not present on the 3DS version. |
+| N/A | 0xF41 (0xF27) | First Person Stick Sensitivity | Byte | "1st-Person Stick Sensitivity" setting. `1` = Low, `2` = Standard, `3` = High. Not present on the 3DS version. |
+| N/A | 0xF42 (0xF28) | Level Brightness | Byte | "TV Mode Brightness" setting. `0` = Dimmest, `4` = Brightest. Not present on the 3DS version. |
+| N/A | 0xF43 (0xF29) | Hide Minimap | Boolean | "Minimap" setting. `0` = Show, `1` = Hide. Not present on the 3DS version. |
 
 The names and locations of these fields (though not their type or purpose) is fairly easy to locate due to two functions within the game's executable that list them.
 
 The first one, used for the title screen data, is as follows (decompiled C code generated by Ghidra):
 
 ```c
-// .text:0027fa94h (file offset: 0x0028fa94)
+// 3DS - .text:0027fa94h (file offset: 0x0028fa94)
 void FUN_0037fa94(int param_1,undefined *param_2,undefined4 param_3,int param_4)
 {
   (*(code *)param_2)("mDataCRC",param_1,0,4,param_3);
@@ -142,12 +149,42 @@ void FUN_0037fa94(int param_1,undefined *param_2,undefined4 param_3,int param_4)
   }
   return;
 }
+
+// Switch - .text:00112ebch
+void FUN_60112ebc(void)
+{
+  undefined auStack_40 [48];
+  
+  FUN_60112e0c((int)auStack_40);
+  DAT_61704fec = DAT_61704fec + 0x1a;
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mDataCRC",8);
+  FUN_60600cb4(&DAT_61704ff0,4);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mVersionCRC",0xb);
+  FUN_60600cb4(&DAT_61704ff0,4);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mFurthestClearedMansionIndex",0x1c);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mFurthestClearedMissionIndex",0x1c);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mTowerHighestFloorClimbed",0x19);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mTotalTreasureAcquired",0x16);
+  FUN_60600cb4(&DAT_61704ff0,4);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mTotalBoosCaptured",0x12);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mTotalDarkmoonPiecesAcquired",0x1c);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mStars",6);
+  FUN_60600cb4(&DAT_61704ff0,1);
+  FUN_60600d0c(&DAT_61704ff0,(uint *)"mTimePlayedInSeconds",0x14);
+  FUN_60600cb4(&DAT_61704ff0,8);
+  return;
+}
 ```
 
 The second one, used for in-game save data, is as follows:
 
 ```c
-// .text:0027fe78h (file offset: 0x0028fe78)
+// 3DS - .text:0027fe78h (file offset: 0x0028fe78)
 void FUN_0037fe78(int param_1,undefined *param_2,undefined4 param_3,int param_4)
 {
   bool bVar1;
@@ -212,6 +249,142 @@ void FUN_0037fe78(int param_1,undefined *param_2,undefined4 param_3,int param_4)
     return;
   }
   return;
+}
+
+// Switch - .text:001140c0h
+uint FUN_601140c0(uint param_1)
+{
+  undefined auStack_f48 [3884];
+  uint local_1c;
+  
+  local_1c = 0;
+  FUN_601133dc((int)auStack_f48);
+  if (-1 < (int)param_1) {
+    FUN_60600d0c(&local_1c,(uint *)"mDataCRC",8);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mVersionCRC",0xb);
+    FUN_60600cb4(&local_1c,4);
+    if (param_1 != 0) {
+      FUN_60600d0c(&local_1c,(uint *)"mSaveGameVersionNumber",0x16);
+      FUN_60600cb4(&local_1c,4);
+    }
+    FUN_60600d0c(&local_1c,(uint *)"mDiscoveredNIS",0xe);
+    FUN_60600cb4(&local_1c,0x800);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionCompletion",0x19);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionLocked",0x15);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionGrade",0x14);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionPrevGrade",0x18);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionBooCaptured",0x1a);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionBooNotifyState",0x1d);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionNotifyState",0x1a);
+    FUN_60600cb4(&local_1c,0x3c);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionClearTime",0x18);
+    FUN_60600cb4(&local_1c,0xf0);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionGhostsCaptured",0x1d);
+    FUN_60600cb4(&local_1c,0x78);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionDamageTaken",0x1a);
+    FUN_60600cb4(&local_1c,0x78);
+    FUN_60600d0c(&local_1c,(uint *)"mMansionMissionTreasureCollected",0x20);
+    FUN_60600cb4(&local_1c,0x78);
+    FUN_60600d0c(&local_1c,(uint *)"mNumBasicGhostCollected",0x17);
+    FUN_60600cb4(&local_1c,0x1d);
+    FUN_60600d0c(&local_1c,(uint *)"mMaxBasicGhostWeight",0x14);
+    FUN_60600cb4(&local_1c,0x3a);
+    FUN_60600d0c(&local_1c,(uint *)"mBasicGhostNotifyState",0x16);
+    FUN_60600cb4(&local_1c,0x1d);
+    FUN_60600d0c(&local_1c,(uint *)"mBasicGhostNotifyBecauseHigherWeight",0x24);
+    FUN_60600cb4(&local_1c,0x1d);
+    FUN_60600d0c(&local_1c,(uint *)"mAnyOptionalBooCaptured",0x17);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mJustCollectedChaser",0x14);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mGhostWeightRequirement",0x17);
+    FUN_60600cb4(&local_1c,0x5a);
+    FUN_60600d0c(&local_1c,(uint *)"mGhostCollectableState",0x16);
+    FUN_60600cb4(&local_1c,0x2d);
+    FUN_60600d0c(&local_1c,(uint *)"mNumGhostCollected",0x12);
+    FUN_60600cb4(&local_1c,0x2d);
+    FUN_60600d0c(&local_1c,(uint *)"mMaxGhostWeight",0xf);
+    FUN_60600cb4(&local_1c,0x5a);
+    FUN_60600d0c(&local_1c,(uint *)"mGhostNotifyState",0x11);
+    FUN_60600cb4(&local_1c,0x2d);
+    FUN_60600d0c(&local_1c,(uint *)"mGhostNotifyBecauseHigherWeight",0x1f);
+    FUN_60600cb4(&local_1c,0x2d);
+    FUN_60600d0c(&local_1c,(uint *)"mGemCollected",0xd);
+    FUN_60600cb4(&local_1c,0x4e);
+    FUN_60600d0c(&local_1c,(uint *)"mGemNotifyState",0xf);
+    FUN_60600cb4(&local_1c,0x4e);
+    FUN_60600d0c(&local_1c,(uint *)"mHasPoltergust",0xe);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mSeenInitialDSHorrorAnim",0x18);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mHasMarioBeenRevealedInTheStory",0x1f);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mLastMansionPlayed",0x12);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mTotalTreasureAcquired",0x16);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mTreasureToNotifyDuringUnloading",0x20);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mTotalGhostWeightAcquired",0x19);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mDarklightUpgradeLevel",0x16);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mDarklightUpgradeNotifyState",0x1c);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mPoltergustUpgradeLevel",0x17);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mPoltergustUpgradeNotifyState",0x1d);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mHasSuperPoltergust",0x13);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mSuperPoltergustNotifyState",0x1b);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mHasSeenReviveBonePIP",0x15);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mBestTerrorTowerClearTime",0x19);
+    FUN_60600cb4(&local_1c,0x60);
+    FUN_60600d0c(&local_1c,(uint *)"mEndlessModeHighestFloorReached",0x1f);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mAnyModeHighestFloorReached",0x1b);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mEndlessFloorsUnlocked",0x16);
+    FUN_60600cb4(&local_1c,4);
+    FUN_60600d0c(&local_1c,(uint *)"mRandomTowerUnlocked",0x14);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mTerrorTowerNotifyState",0x17);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mRumbleEnabled",0xe);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mGyroscopeEnabled",0x11);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mRStickOmnidirectional",0x16);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mXAxisInverted",0xe);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mYAxisInverted",0xe);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mGyroscopeSensitivity",0x15);
+    FUN_60600cb4(&local_1c,1);
+    FUN_60600d0c(&local_1c,(uint *)"mFirstPersonStickSensitivity",0x1c);
+    FUN_60600cb4(&local_1c,1);
+    if (1 < param_1) {
+      FUN_60600d0c(&local_1c,(uint *)"mLevelBrightness",0x10);
+      FUN_60600cb4(&local_1c,1);
+      if (param_1 != 2) {
+        FUN_60600d0c(&local_1c,(uint *)"mHideMinimap",0xc);
+        FUN_60600cb4(&local_1c,1);
+      }
+    }
+  }
+  FUN_60600cb4(&local_1c,2);
+  return local_1c;
 }
 ```
 
@@ -522,7 +695,7 @@ This is a list of all the possible tower configurations and their respective ind
 
 The save file contains **four** checksums, two for each section. Each checksum is 32-bits (4 bytes), and like every other numerical value, is stored in little endian order.
 
-Each section has one "Data CRC" and one "Version CRC". The Version CRC is constant across all save files: `0x7B, 0x0C, 0x27, 0x49` for the title screen section and `0xAD, 0x03, 0x32, 0xD4` for the in-game section. The Data CRC is more interesting and is the part of the reverse engineering that by far took the longest to figure out. It is computed using all of the data stored within the relevant section of the save file (including the Version CRCs) and is used to detect corruption/modification.
+Each section has one "Data CRC" and one "Version CRC". The Version CRC is constant across all save files: `0x7B, 0x0C, 0x27, 0x49` for the title screen section on both versions, `0xAD, 0x03, 0x32, 0xD4` for the in-game section on the 3DS version, and `0xA5, 0xEB, 0xAA, 0x3D` for the in-game section on the Switch version. The Data CRC is more interesting and is the part of the reverse engineering that by far took the longest to figure out. It is computed using all of the data stored within the relevant section of the save file (including the Version CRCs) and is used to detect corruption/modification.
 
 If any of these four checksums fail to match the expected values, the game will refuse to load the save file. If it is the title screen section that is corrupt, then the profile will be labelled "Corrupted" on the title screen before even selecting it. If it is the in-game section that is corrupted, the message saying as such will not be displayed until you attempt to load the corrupted save file.
 
@@ -531,7 +704,7 @@ The game does not fully compute the Data CRC on-the-fly, instead it utilises a 1
 The game's CRC generation algorithm looks something like this (decompiled C code generated by Ghidra, generic names replaced with more descriptive ones by myself):
 
 ```c
-// .text:002b4b98h (file offset: 0x002c4b98)
+// 3DS - .text:002b4b98h (file offset: 0x002c4b98)
 void GenerateCRC(uint *destination, uint *source, uint byteCount)
 {
   uint toProcess;
@@ -587,4 +760,6 @@ private static uint LookupCRCTable(int lookupIndex)
 
 (The first two `for` loops have been completely omitted, as simply running the final one alone will produce the same result).
 
-The full lookup table can be found in [SaveTools/CRC.cs](https://github.com/TollyH/LM2_SaveEditor/blob/main/SaveTools/CRC.cs) if you're curious, though it is just one long list of bytes. If you want to find it in an original dumped binary, it can be found at `.data:00022904h` (file offset `0x0082b904`).
+The full lookup table can be found in [SaveTools/CRC.cs](https://github.com/TollyH/LM2_SaveEditor/blob/main/SaveTools/CRC.cs) if you're curious, though it is just one long list of bytes. If you want to find it in an original dumped binary, it can be found at `.data:00022904h` (file offset `0x0082b904`) for the 3DS, or at `.rodata.1:804b7h` (file offset `0x00f4a8c0`) for the Switch.
+
+The CRC algorithm and lookup table are the same in both the 3DS and Switch versions, though the generated checksums will be different due to the Switch version having additional fields in the save file.

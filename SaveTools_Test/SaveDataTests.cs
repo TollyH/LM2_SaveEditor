@@ -149,7 +149,7 @@
         {
             byte[] gameData = File.ReadAllBytes("TestData/SaveData_GameDataWrongLengthShort.bin"); ;
             _ = Assert.ThrowsException<InvalidSaveFormatException>(() => new SaveData.GameData(gameData));
-            
+
             gameData = File.ReadAllBytes("TestData/SaveData_GameDataWrongLengthLong.bin"); ;
             _ = Assert.ThrowsException<InvalidSaveFormatException>(() => new SaveData.GameData(gameData));
         }

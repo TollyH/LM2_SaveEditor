@@ -1,0 +1,127 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: Luigi's Mansion 2 HD Save File
+//   Authors: Tolly Hill, Nintendo & Next Level Games
+//   Version: 1.0.0
+//   Purpose: 
+//  Category: Game Saves
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+typedef ubyte byte;
+
+typedef enum <byte> {
+    False = 0,
+    True = 1
+} BOOL;
+
+typedef enum <byte> {
+    Bronze = 0,
+    Silver = 1,
+    Gold = 2,
+    Unknown = 0xFF
+} GRADE;
+
+typedef enum <byte> {
+    GloomyManor = 0,
+    HauntedTowers = 1,
+    OldClockworks = 2,
+    SecretMine = 3,
+    TreacherousMansion = 4,
+    KingBoosIllusion = 5,
+    None = 0xFF
+} MANSION;
+
+struct SAVE {
+    struct TITLE {
+        uint32  DataCRC <bgcolor=0xf870ff>;
+        uint32  VersionCRC <bgcolor=0xff6bc6>;
+        MANSION FurthestClearedMansion <bgcolor=0x73ff66>;
+        byte    FurthestClearedMission <bgcolor=0x5db854>;
+        byte    HighestTowerFloor <bgcolor=0xbae84f>;
+        int32   TotalTreasureAcquired <bgcolor=0x00c9ff>;
+        byte    BoosCaptured <bgcolor=0xffffff>;
+        byte    DarkMoonPieces <bgcolor=0xfa208c>;
+        byte    EGaddMedals <bgcolor=0x4294ff>;
+        int64   PlaytimeSeconds <bgcolor=0x14f5db>;
+    } Title;
+
+    struct GAME {
+        uint32  DataCRC <bgcolor=0xf870ff>;
+        uint32  VersionCRC <bgcolor=0xff6bc6>;
+        uint32  SaveGameVersionNumber <bgcolor=0x6bffc6>;
+
+        byte    DiscoveredNIS[2048] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+
+        BOOL    MissionCompletion[60] <bgcolor=0x73ff66>;
+        BOOL    MissionLocked[60] <bgcolor=0x5db854>;
+        GRADE   MissionGrade[60] <bgcolor=0xbae84f>;
+        GRADE   MissionPrevGrade[60] <bgcolor=0xbdb440>;
+        BOOL    MissionBooCaptured[60] <bgcolor=0xffffff>;
+        byte    MissionBooNotifyState[60] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        byte    MissionNotifyState[60] <bgcolor=0x999999, fgcolor=0xaaaaaa>;
+        float   MissionClearTime[60] <bgcolor=0x14f5db>;
+        uint16  MissionGhostsCaptured[60] <bgcolor=0x021bf1b>;
+        uint16  MissionDamageTaken[60] <bgcolor=0x2638ff>;
+        uint16  MissionTreasureCollected[60] <bgcolor=0x00c9ff>;
+
+        byte    NumBasicGhostCollected[29] <bgcolor=0x021bf1b>;
+        uint16  MaxBasicGhostWeight[29] <bgcolor=0x35e8bb>;
+        byte    BasicGhostNotifyState[29] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        byte    BasicGhostNotifyBecauseHigherWeight[29] <bgcolor=0x999999, fgcolor=0xaaaaaa>;
+
+        BOOL    AnyOptionalBooCaptured <bgcolor=0xffffff>;
+        BOOL    JustCollectedPolterpup <bgcolor=0x777777, fgcolor=0xaaaaaa>;
+
+        uint16  GhostWeightRequirement[45] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        byte    GhostCollectableState[45] <bgcolor=0x87ed87>;
+        byte    NumGhostCollected[45] <bgcolor=0x021bf1b>;
+        uint16  MaxGhostWeight[45] <bgcolor=0x35e8bb>;
+        byte    GhostNotifyState[45] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        byte    GhostNotifyBecauseHigherWeight[45] <bgcolor=0x999999, fgcolor=0xaaaaaa>;
+
+        BOOL    GemCollected[78] <bgcolor=0xff8aca>;
+        byte    GemNotifyState[78] <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+
+        BOOL    HasPoltergust <bgcolor=0x1647f7>;
+        BOOL    SeenInitialDualScreamAnimation <bgcolor=0xe1e1e1>;
+        BOOL    HasMarioBeenRevealedInTheStory <bgcolor=0x0000ff>;
+
+        MANSION LastMansionPlayed <bgcolor=0x73ff66>;
+
+        int32   TotalTreasureAcquired <bgcolor=0x00c9ff>;
+        int32   TreasureToNotifyDuringUnloading <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        int32   TotalGhostWeightAcquired <bgcolor=0x35e8bb>;
+
+        byte    DarklightUpgradeLevel <bgcolor=0xf54293>;
+        byte    DarklightNotifyState <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        byte    PoltergustUpgradeLevel <bgcolor=0x1647f7>;
+        byte    PoltergustNotifyState <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        BOOL    HasSuperPoltergust <bgcolor=0x1647f7>;
+        byte    SuperPoltergustNotifyState <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+
+        BOOL    HasSeenReviveBonePIP <bgcolor=0x2ca8f5>;
+
+        uint16  BestTowerClearTime[48] <bgcolor=0x14f5db>;
+        byte    EndlessModeHighestFloorReached[4] <bgcolor=0x73ff66>;
+        byte    AnyModeHighestFloorReached <bgcolor=0x5db854>;
+        BOOL    EndlessFloorsUnlocked[4] <bgcolor=0xbae84f>;
+        BOOL    RandomTowerUnlocked <bgcolor=0xd99f77>;
+        byte    TowerNotifyState <bgcolor=0xbfbfbf, fgcolor=0xaaaaaa>;
+        
+        BOOL    RumbleEnabled <bgcolor=0xa34567>;
+        BOOL    GyroscopeEnabled <bgcolor=0x45a367>;
+        BOOL    RStickOmnidirectional <bgcolor=0xa36745>;
+        BOOL    XAxisInverted <bgcolor=0x67a345>;
+        BOOL    YAxisInverted <bgcolor=0x663355>;
+        byte    GyroscopeSensitivity <bgcolor=0x335566>;
+        byte    FirstPersonStickSensitivity <bgcolor=0x665533>;
+        byte    LevelBrightness <bgcolor=0x126578>;
+        BOOL    HideMinimap <bgcolor=0xf53212>;
+    } Game;
+} Save;

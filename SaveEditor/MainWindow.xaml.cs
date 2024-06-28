@@ -117,7 +117,7 @@ namespace LM2.SaveEditor
                 .OfType<ComboBoxItem>()
                 .Where(x => (Mansion)x.Tag == loadedSave.GameSaveData.LastMansionPlayed)
                 .FirstOrDefault();
-            
+
             endlessHunterFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[0].ToString();
             endlessRushFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[1].ToString();
             endlessPolterpupFloorBox.Text = loadedSave.GameSaveData.EndlessModeHighestFloorReached[2].ToString();
@@ -156,6 +156,16 @@ namespace LM2.SaveEditor
             hasSuperPoltergustCheckbox.IsChecked = loadedSave.GameSaveData.HasSuperPoltergust;
             poltergustUpgradeSlider.Value = loadedSave.GameSaveData.PoltergustUpgradeLevel;
             darklightUpgradeSlider.Value = loadedSave.GameSaveData.DarklightUpgradeLevel;
+
+            rumbleCheckbox.IsChecked = loadedSave.GameSaveData.RumbleEnabled;
+            gyroscopeCheckbox.IsChecked = loadedSave.GameSaveData.GyroscopeEnabled;
+            rOmnidirectionCheckbox.IsChecked = loadedSave.GameSaveData.RStickOmnidirectional;
+            xInvertedCheckbox.IsChecked = loadedSave.GameSaveData.XAxisInverted;
+            yInvertedCheckbox.IsChecked = loadedSave.GameSaveData.YAxisInverted;
+            gyroscopeSensitivitySlider.Value = loadedSave.GameSaveData.GyroscopeSensitivity;
+            stickSensitivitySlider.Value = loadedSave.GameSaveData.FirstPersonStickSensitivity;
+            brightnessSlider.Value = loadedSave.GameSaveData.LevelBrightness;
+            minimapCheckbox.IsChecked = loadedSave.GameSaveData.HideMinimap;
 
             UpdateGemCheckboxes();
 
@@ -277,6 +287,16 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.HasSuperPoltergust = hasSuperPoltergustCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.PoltergustUpgradeLevel = (byte)poltergustUpgradeSlider.Value;
             loadedSave.GameSaveData.DarklightUpgradeLevel = (byte)darklightUpgradeSlider.Value;
+
+            loadedSave.GameSaveData.RumbleEnabled = rumbleCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.GyroscopeEnabled = gyroscopeCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.RStickOmnidirectional = rOmnidirectionCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.XAxisInverted = xInvertedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.YAxisInverted = yInvertedCheckbox.IsChecked ?? false;
+            loadedSave.GameSaveData.GyroscopeSensitivity = (byte)gyroscopeSensitivitySlider.Value;
+            loadedSave.GameSaveData.FirstPersonStickSensitivity = (byte)stickSensitivitySlider.Value;
+            loadedSave.GameSaveData.LevelBrightness = (byte)brightnessSlider.Value;
+            loadedSave.GameSaveData.HideMinimap = minimapCheckbox.IsChecked ?? false;
 
             if (titleSaveData)
             {
@@ -470,7 +490,7 @@ namespace LM2.SaveEditor
         {
             OpenFileDialog openDialog = new()
             {
-                Filter = "Save File|*.sav",
+                Filter = "All Save Files|*.sav;*.txt|3DS Save File|*.sav|Switch Save File|*.txt",
                 CheckPathExists = true,
                 CheckFileExists = true
             };
@@ -511,7 +531,8 @@ namespace LM2.SaveEditor
                 return;
             }
             UpdateSaveData();
-            FileOperations.WriteSaveData(loadedSavePath, loadedSave);
+            FileOperations.WriteSaveData(loadedSavePath, loadedSave,
+                loadedSavePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase));
         }
 
         private void SaveAsItem_Click(object sender, RoutedEventArgs e)
@@ -525,7 +546,7 @@ namespace LM2.SaveEditor
             {
                 AddExtension = true,
                 DefaultExt = ".sav",
-                Filter = "Save File|*.sav",
+                Filter = "3DS Save File|*.sav|Switch Save File|*.txt",
                 CheckPathExists = true,
                 FileName = loadedSavePath
             };
@@ -533,7 +554,8 @@ namespace LM2.SaveEditor
             {
                 return;
             }
-            FileOperations.WriteSaveData(saveDialog.FileName, loadedSave);
+            FileOperations.WriteSaveData(saveDialog.FileName, loadedSave,
+                saveDialog.FileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase));
         }
 
         private void CloseItem_Click(object sender, RoutedEventArgs e)

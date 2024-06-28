@@ -173,8 +173,11 @@ namespace LM2.SaveTools
 
         public partial class GameData
         {
-            public uint DataCRC => CRC.CalculateChecksum(GetBytes(false));
-            public static uint VersionCRC => 0xD43203AD;
+            public static uint VersionCRC3DS => 0xD43203AD;
+            public static uint VersionCRCSwitch => 0x3DAAEBA5;
+
+            // Only used for Switch saves
+            public static int SaveGameVersionNumber => 3;
 
             public byte[] DiscoveredNIS { get; private set; }
 
@@ -234,12 +237,31 @@ namespace LM2.SaveTools
             public bool RandomTowerUnlocked { get; set; }
             public byte TowerNotifyState { get; set; }
 
+            // Switch-Exclusive Fields
+            public bool RumbleEnabled { get; set; }
+            public bool GyroscopeEnabled { get; set; }
+            public bool RStickOmnidirectional { get; set; }
+            public bool XAxisInverted { get; set; }
+            public bool YAxisInverted { get; set; }
+            public byte GyroscopeSensitivity { get; set; }
+            public byte FirstPersonStickSensitivity { get; set; }
+            public byte LevelBrightness { get; set; }
+            public bool HideMinimap { get; set; }
+
+
             public GameData(byte[] gameDataBytes, bool ignoreCRC = false)
             {
-                if (gameDataBytes.Length != 0xF1D)
+                bool switchVersion = false;
+                uint correctVersionCRC = VersionCRC3DS;
+                if (gameDataBytes.Length == 0xF2A)
+                {
+                    switchVersion = true;
+                    correctVersionCRC = VersionCRCSwitch;
+                }
+                else if (gameDataBytes.Length != 0xF1D)
                 {
                     throw new InvalidSaveFormatException(
-                        $"Game save data must be 0xF1D (3869) bytes long. {gameDataBytes.Length} bytes were provided.");
+                        $"Game save data must be either 0xF1D (3869) or 0xF2A (3882) bytes long. {gameDataBytes.Length} bytes were provided.");
                 }
 
                 Span<byte> gameDataSpan = gameDataBytes.AsSpan();
@@ -254,12 +276,31 @@ namespace LM2.SaveTools
                     }
 
                     uint givenVersionCRC = BinaryPrimitives.ReadUInt32LittleEndian(gameDataSpan[4..8]);
-                    if (givenVersionCRC != VersionCRC)
+                    if (givenVersionCRC != correctVersionCRC)
                     {
+                        string correctString = switchVersion ? "0xA5, 0xEB, 0xAA, 0x3D" : "0xAD, 0x03, 0x32, 0xD4";
                         throw new InvalidChecksumException(
-                            "Given game save data has an invalid version checksum (this should always be 0xAD, 0x03, 0x32, 0xD4). " +
+                            $"Given game save data has an invalid version checksum (this should always be {correctString}). " +
                             "Set the ignoreCRC parameter to true to ignore this in the future.");
                     }
+                }
+
+                if (switchVersion)
+                {
+                    if (!ignoreCRC)
+                    {
+                        int givenVersion = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[8..12]);
+                        if (givenVersion != SaveGameVersionNumber)
+                        {
+                            throw new InvalidChecksumException(
+                                $"Given game save data has an invalid version number (expected {SaveGameVersionNumber}, got {givenVersion}). " +
+                                "Set the ignoreCRC parameter to true to ignore this in the future.");
+                        }
+                    }
+
+                    // Omit first 4 bytes of span so that offsets remain consistent between 3DS and Switch saves
+                    // (we don't need to read any of the first 12 bytes again now).
+                    gameDataSpan = gameDataSpan[4..];
                 }
 
                 DiscoveredNIS = gameDataSpan[8..0x808].ToArray();
@@ -267,13 +308,13 @@ namespace LM2.SaveTools
                 MissionCompletion = new bool[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionCompletion[i] = gameDataSpan[0x808 + i] == 1;
+                    MissionCompletion[i] = gameDataSpan[0x808 + i] != 0;
                 }
 
                 MissionLocked = new bool[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionLocked[i] = gameDataSpan[0x844 + i] == 1;
+                    MissionLocked[i] = gameDataSpan[0x844 + i] != 0;
                 }
 
                 MissionGrade = new Grade[60];
@@ -291,7 +332,7 @@ namespace LM2.SaveTools
                 MissionBooCaptured = new bool[60];
                 for (int i = 0; i < 60; i++)
                 {
-                    MissionBooCaptured[i] = gameDataSpan[0x8F8 + i] == 1;
+                    MissionBooCaptured[i] = gameDataSpan[0x8F8 + i] != 0;
                 }
 
                 MissionBooNotifyState = new byte[60];
@@ -354,8 +395,8 @@ namespace LM2.SaveTools
                     BasicGhostNotifyBecauseHigherWeight[i] = gameDataSpan[0xC78 + i];
                 }
 
-                AnyOptionalBooCaptured = gameDataSpan[0xC95] == 1;
-                JustCollectedPolterpup = gameDataSpan[0xC96] == 1;
+                AnyOptionalBooCaptured = gameDataSpan[0xC95] != 0;
+                JustCollectedPolterpup = gameDataSpan[0xC96] != 0;
 
                 GhostWeightRequirement = new ushort[45];
                 for (int i = 0; i < 45; i++)
@@ -396,7 +437,7 @@ namespace LM2.SaveTools
                 GemCollected = new bool[78];
                 for (int i = 0; i < 78; i++)
                 {
-                    GemCollected[i] = gameDataSpan[0xDFF + i] == 1;
+                    GemCollected[i] = gameDataSpan[0xDFF + i] != 0;
                 }
 
                 GemNotifyState = new byte[78];
@@ -405,9 +446,9 @@ namespace LM2.SaveTools
                     GemNotifyState[i] = gameDataSpan[0xE4D + i];
                 }
 
-                HasPoltergust = gameDataSpan[0xE9B] == 1;
-                SeenInitialDualScreamAnimation = gameDataSpan[0xE9C] == 1;
-                HasMarioBeenRevealedInTheStory = gameDataSpan[0xE9D] == 1;
+                HasPoltergust = gameDataSpan[0xE9B] != 0;
+                SeenInitialDualScreamAnimation = gameDataSpan[0xE9C] != 0;
+                HasMarioBeenRevealedInTheStory = gameDataSpan[0xE9D] != 0;
                 LastMansionPlayed = (Mansion)gameDataSpan[0xE9E];
                 TotalTreasureAcquired = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xE9F..0xEA3]);
                 TreasureToNotifyDuringUnloading = BinaryPrimitives.ReadInt32LittleEndian(gameDataSpan[0xEA3..0xEA7]);
@@ -416,9 +457,9 @@ namespace LM2.SaveTools
                 DarklightNotifyState = gameDataSpan[0xEAC];
                 PoltergustUpgradeLevel = gameDataSpan[0xEAD];
                 PoltergustNotifyState = gameDataSpan[0xEAE];
-                HasSuperPoltergust = gameDataSpan[0xEAF] == 1;
+                HasSuperPoltergust = gameDataSpan[0xEAF] != 0;
                 SuperPoltergustNotifyState = gameDataSpan[0xEB0];
-                HasSeenReviveBonePIP = gameDataSpan[0xEB1] == 1;
+                HasSeenReviveBonePIP = gameDataSpan[0xEB1] != 0;
 
                 BestTowerClearTime = new ushort[48];
                 for (int i = 0; i < 48; i++)
@@ -437,21 +478,53 @@ namespace LM2.SaveTools
                 EndlessFloorsUnlocked = new bool[4];
                 for (int i = 0; i < 4; i++)
                 {
-                    EndlessFloorsUnlocked[i] = gameDataSpan[0xF17 + i] == 1;
+                    EndlessFloorsUnlocked[i] = gameDataSpan[0xF17 + i] != 0;
                 }
 
-                RandomTowerUnlocked = gameDataSpan[0xF1B] == 1;
+                RandomTowerUnlocked = gameDataSpan[0xF1B] != 0;
                 TowerNotifyState = gameDataSpan[0xF1C];
+
+                if (switchVersion)
+                {
+                    RumbleEnabled = gameDataSpan[0xF1D] != 0;
+                    GyroscopeEnabled = gameDataSpan[0xF1E] != 0;
+                    RStickOmnidirectional = gameDataSpan[0xF1F] != 0;
+                    XAxisInverted = gameDataSpan[0xF20] != 0;
+                    YAxisInverted = gameDataSpan[0xF21] != 0;
+                    GyroscopeSensitivity = gameDataSpan[0xF22];
+                    FirstPersonStickSensitivity = gameDataSpan[0xF23];
+                    LevelBrightness = gameDataSpan[0xF24];
+                    HideMinimap = gameDataSpan[0xF25] != 0;
+                }
+                else
+                {
+                    // 3DS saves don't define these values, so just initialise them to the defaults
+                    RumbleEnabled = true;
+                    GyroscopeEnabled = true;
+                    RStickOmnidirectional = true;
+                    XAxisInverted = false;
+                    YAxisInverted = false;
+                    GyroscopeSensitivity = 2;
+                    FirstPersonStickSensitivity = 2;
+                    LevelBrightness = 2;
+                    HideMinimap = false;
+                }
             }
 
-            public byte[] GetBytes(bool includeDataCRC = true)
+            public uint DataCRC(bool switchVersion)
             {
-                byte[] gameSaveBytes = new byte[includeDataCRC ? 3869 : 3865];
+                return CRC.CalculateChecksum(GetBytes(false, switchVersion));
+            }
+
+            public byte[] GetBytes(bool includeDataCRC = true, bool switchVersion = false)
+            {
+                int additionalBytes = switchVersion ? 13 : 0;
+                byte[] gameSaveBytes = new byte[(includeDataCRC ? 3869 : 3865) + additionalBytes];
 
                 Span<byte> gameSaveSpan;
                 if (includeDataCRC)
                 {
-                    BinaryPrimitives.WriteUInt32LittleEndian(gameSaveBytes, DataCRC);
+                    BinaryPrimitives.WriteUInt32LittleEndian(gameSaveBytes, DataCRC(switchVersion));
                     gameSaveSpan = gameSaveBytes.AsSpan()[4..];
                 }
                 else
@@ -461,8 +534,14 @@ namespace LM2.SaveTools
 
                 int offset = 0;
 
-                BinaryPrimitives.WriteUInt32LittleEndian(gameSaveSpan, VersionCRC);
+                BinaryPrimitives.WriteUInt32LittleEndian(gameSaveSpan, switchVersion ? VersionCRCSwitch : VersionCRC3DS);
                 offset += 4;
+
+                if (switchVersion)
+                {
+                    BinaryPrimitives.WriteInt32LittleEndian(gameSaveSpan[offset..], SaveGameVersionNumber);
+                    offset += 4;
+                }
 
                 foreach (byte nis in DiscoveredNIS)
                 {
@@ -614,6 +693,19 @@ namespace LM2.SaveTools
                 gameSaveSpan[offset++] = (byte)(RandomTowerUnlocked ? 1 : 0);
                 gameSaveSpan[offset++] = TowerNotifyState;
 
+                if (switchVersion)
+                {
+                    gameSaveSpan[offset++] = (byte)(RumbleEnabled ? 1 : 0);
+                    gameSaveSpan[offset++] = (byte)(GyroscopeEnabled ? 1 : 0);
+                    gameSaveSpan[offset++] = (byte)(RStickOmnidirectional ? 1 : 0);
+                    gameSaveSpan[offset++] = (byte)(XAxisInverted ? 1 : 0);
+                    gameSaveSpan[offset++] = (byte)(YAxisInverted ? 1 : 0);
+                    gameSaveSpan[offset++] = GyroscopeSensitivity;
+                    gameSaveSpan[offset++] = FirstPersonStickSensitivity;
+                    gameSaveSpan[offset++] = LevelBrightness;
+                    gameSaveSpan[offset++] = (byte)(HideMinimap ? 1 : 0);
+                }
+
                 return gameSaveBytes;
             }
         }
@@ -623,22 +715,22 @@ namespace LM2.SaveTools
 
         public SaveData(byte[] saveBytes, bool ignoreCRC = false)
         {
-            if (saveBytes.Length != 0xF37)
+            if (saveBytes.Length is not 0xF37 and not 0xF44)
             {
                 throw new InvalidSaveFormatException(
-                    $"Save data must be 0xF37 (3895) bytes long. {saveBytes.Length} bytes were provided.");
+                    $"Save data must be 0xF37 (3895) or 0xF44 (3908) bytes long. {saveBytes.Length} bytes were provided.");
             }
 
             TitleScreenSaveData = new(saveBytes[..0x1A], ignoreCRC);
             GameSaveData = new(saveBytes[0x1A..], ignoreCRC);
         }
 
-        public byte[] GetBytes()
+        public byte[] GetBytes(bool switchVersion = false)
         {
-            byte[] saveData = new byte[0xF37];
+            byte[] saveData = new byte[switchVersion ? 0xF44 : 0xF37];
 
-            Array.Copy(TitleScreenSaveData.GetBytes(includeDataCRC: true), saveData, 0x1A);
-            Array.Copy(GameSaveData.GetBytes(includeDataCRC: true), 0, saveData, 0x1A, 0xF1D);
+            Array.Copy(TitleScreenSaveData.GetBytes(), saveData, 0x1A);
+            Array.Copy(GameSaveData.GetBytes(switchVersion: switchVersion), 0, saveData, 0x1A, switchVersion ? 0xF2A : 0xF1D);
 
             return saveData;
         }
