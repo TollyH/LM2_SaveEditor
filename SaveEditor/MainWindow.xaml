@@ -235,6 +235,7 @@
                                         <ComboBoxItem Content="Old Clockworks" Tag="{x:Static lm2:Mansion.OldClockworks}"/>
                                         <ComboBoxItem Content="Secret Mine" Tag="{x:Static lm2:Mansion.SecretMine}"/>
                                         <ComboBoxItem Content="Treacherous Mansion" Tag="{x:Static lm2:Mansion.TreacherousMansion}"/>
+                                        <ComboBoxItem Content="King Boo's Illusion" Tag="{x:Static lm2:Mansion.KingBoosIllusion}"/>
                                         <ComboBoxItem Content="None" Tag="{x:Static lm2:Mansion.None}"/>
                                     </ComboBox>
                                 </Grid>
