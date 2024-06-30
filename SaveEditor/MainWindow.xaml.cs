@@ -249,7 +249,11 @@ namespace LM2.SaveEditor
             loadedSave.GameSaveData.AnyOptionalBooCaptured = optionalBooCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.SeenInitialDualScreamAnimation = dualScreamCheckbox.IsChecked ?? false;
             loadedSave.GameSaveData.HasMarioBeenRevealedInTheStory = marioRevealedCheckbox.IsChecked ?? false;
-            loadedSave.GameSaveData.LastMansionPlayed = (Mansion)((ComboBoxItem)lastPlayedMansionCombo.SelectedItem).Tag;
+            ComboBoxItem? lastPlayedMansionSelection = (ComboBoxItem)lastPlayedMansionCombo.SelectedItem;
+            if (lastPlayedMansionSelection is not null)
+            {
+                loadedSave.GameSaveData.LastMansionPlayed = (Mansion)lastPlayedMansionSelection.Tag;
+            }
 
             if (byte.TryParse(endlessHunterFloorBox.Text, out byte hunterFloor))
             {
@@ -302,7 +306,7 @@ namespace LM2.SaveEditor
             {
                 UpdateTitlePage();
 
-                if (titleFurthestMissionCombo.SelectedIndex == 0)
+                if (titleFurthestMissionCombo.SelectedIndex <= 0)
                 {
                     loadedSave.TitleScreenSaveData.FurthestClearedMansion = Mansion.None;
                     loadedSave.TitleScreenSaveData.FurthestClearedMission = 0xFF;
